@@ -31,9 +31,9 @@ type ExchangeQuote struct {
 	Volume24h        float64 `json:"volume_24h,omitempty"`
 	Volume7d         float64 `json:"volume_7d,omitempty"`
 	Volume30d        float64 `json:"volume_30d,omitempty"`
-	PercentChange24h float32 `json:"percent_change_24h,omitempty"`
-	PercentChange7d  float32 `json:"percent_change_7d,omitempty"`
-	PercentChange30d float32 `json:"percent_change_30d,omitempty"`
+	PercentChange24h float32 `json:"percent_change_volume_24h,omitempty"`
+	PercentChange7d  float32 `json:"percent_change_volume_7d,omitempty"`
+	PercentChange30d float32 `json:"percent_change_volume_30d,omitempty"`
 }
 
 type BasicExchange struct {
