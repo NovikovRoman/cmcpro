@@ -11,12 +11,16 @@ func TestClient_CryptocurrencyMap(t *testing.T) {
 	require.Len(t, res, 10)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	res, status, _ = cTest.CryptocurrencyMapBySymbol([]string{"BTC", "LTC"})
 
 	require.Len(t, res, 2)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 }

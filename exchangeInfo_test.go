@@ -13,7 +13,9 @@ func TestClient_ExchangeInfo(t *testing.T) {
 	require.NotNil(t, res["16"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	res, status, _ = cTest.ExchangeInfoBySlug([]string{"binance", "poloniex"})
 
@@ -22,5 +24,7 @@ func TestClient_ExchangeInfo(t *testing.T) {
 	require.NotNil(t, res["poloniex"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 }

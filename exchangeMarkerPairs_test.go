@@ -17,7 +17,9 @@ func TestClient_ExchangeMarketPair(t *testing.T) {
 	require.NotNil(t, res.MarketPairs[0].Quote["exchange_reported"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	res, status, _ = cTest.ExchangeMarketPairBySlug(
 		"bittrex", 1, 5, NewConvertByCodes("RUB"),
@@ -30,5 +32,7 @@ func TestClient_ExchangeMarketPair(t *testing.T) {
 	require.NotNil(t, res.MarketPairs[0].Quote["exchange_reported"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 }

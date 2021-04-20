@@ -15,7 +15,9 @@ func TestClient_ToolsPriceConversion(t *testing.T) {
 	require.True(t, res.Quote["RUB"].Price > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	res, status, _ = cTest.ToolsPriceConversionBySymbol(
 		10, "BTC", NewConvertByCodes("RUB"), nil,
@@ -26,5 +28,7 @@ func TestClient_ToolsPriceConversion(t *testing.T) {
 	require.True(t, res.Quote["RUB"].Price > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 }

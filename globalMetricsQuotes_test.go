@@ -13,7 +13,9 @@ func TestClient_GlobalMetricsQuotesLatest(t *testing.T) {
 	require.True(t, res.Quote["RUB"].TotalMarketCap > 1000.0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 }
 
@@ -24,9 +26,12 @@ func TestClient_GlobalMetricsQuotesHistorical(t *testing.T) {
 
 	res, status, _ := cTest.GlobalMetricsQuotesHistorical(perioder, NewConvertByCodes("RUB"))
 
+	require.True(t, len(res.Quotes) > 0)
 	require.True(t, len(res.Quotes) <= 14)
 	require.True(t, res.Quotes[0].Quote["RUB"].TotalMarketCap > 1000.0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 }

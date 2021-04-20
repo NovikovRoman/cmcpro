@@ -16,7 +16,9 @@ func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
 	require.NotNil(t, res["1"].Quote["EUR"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	res, status, _ = cTest.CryptocurrencyQuotesLatestByID(
 		[]uint{1}, NewConvertByCodes("RUB", "EUR"),
@@ -27,7 +29,9 @@ func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
 	require.NotNil(t, res["1"].Quote["EUR"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	res, status, _ = cTest.CryptocurrencyQuotesLatestByID(
 		[]uint{1}, nil,
@@ -37,7 +41,9 @@ func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
 	require.NotNil(t, res["1"].Quote["USD"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	res, status, _ = cTest.CryptocurrencyQuotesLatestByID(
 		[]uint{1000000000}, nil,
@@ -57,7 +63,9 @@ func TestClient_CryptocurrencyQuotesLatestBySlug(t *testing.T) {
 	require.NotNil(t, res["1027"].Quote["EUR"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	res, status, _ = cTest.CryptocurrencyQuotesLatestBySlug(
 		[]string{"---"}, nil,
@@ -77,7 +85,9 @@ func TestClient_CryptocurrencyQuotesLatestBySymbol(t *testing.T) {
 	require.NotNil(t, res["LTC"].Quote["EUR"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	res, status, _ = cTest.CryptocurrencyQuotesLatestBySymbol(
 		[]string{"---"}, NewConvertByCodes("RUB", "EUR"),
@@ -96,12 +106,15 @@ func TestClient_CryptocurrencyQuotesHistoricalByID(t *testing.T) {
 		1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
+	require.NotNil(t, res)
 	require.EqualValues(t, res.ID, 1)
 	require.Equal(t, res.Name, "Bitcoin")
 	require.True(t, len(res.Quotes) <= 14)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.CryptocurrencyQuotesHistoricalByID(
@@ -113,7 +126,9 @@ func TestClient_CryptocurrencyQuotesHistoricalByID(t *testing.T) {
 	require.True(t, len(res.Quotes) <= 4)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 }
 
 func TestClient_CryptocurrencyQuotesHistoricalBySymbol(t *testing.T) {
@@ -125,12 +140,15 @@ func TestClient_CryptocurrencyQuotesHistoricalBySymbol(t *testing.T) {
 		"BTC", perioder, "1d", NewConvertByCodes("USD"),
 	)
 
+	require.NotNil(t, res)
 	require.EqualValues(t, res.ID, 1)
 	require.Equal(t, res.Name, "Bitcoin")
 	require.True(t, len(res.Quotes) <= 14)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.CryptocurrencyQuotesHistoricalBySymbol(
@@ -142,5 +160,7 @@ func TestClient_CryptocurrencyQuotesHistoricalBySymbol(t *testing.T) {
 	require.Len(t, res.Quotes, 2)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 }

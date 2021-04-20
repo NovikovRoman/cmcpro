@@ -14,7 +14,9 @@ func TestClient_ExchangeListingsLatest(t *testing.T) {
 	require.Len(t, res, 2)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 }
 
 // This endpoint is not yet available. It is slated for release by Q3 2019.

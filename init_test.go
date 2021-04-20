@@ -6,15 +6,16 @@ import (
 )
 
 var (
-	cTest *Client
+	cTest    *Client
+	prodTest bool
 )
 
 func init() {
 	var (
 		err error
 	)
-
-	if cTest, err = New(os.Getenv("API-KEY"), false, "", Timeout); err != nil {
+	prodTest = os.Getenv("PRODUCTION") != ""
+	if cTest, err = New(os.Getenv("API-KEY"), prodTest, "", Timeout); err != nil {
 		log.Fatalln(err)
 	}
 }

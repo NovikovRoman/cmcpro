@@ -13,7 +13,9 @@ func TestClient_CryptocurrencyInfo(t *testing.T) {
 	require.NotNil(t, res["1027"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	res, status, _ = cTest.CryptocurrencyInfoBySlug([]string{"bitcoin", "litecoin"})
 
@@ -22,7 +24,9 @@ func TestClient_CryptocurrencyInfo(t *testing.T) {
 	require.NotNil(t, res["2"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	res, status, _ = cTest.CryptocurrencyInfoBySymbol([]string{"BTC", "LTC"})
 
@@ -31,5 +35,7 @@ func TestClient_CryptocurrencyInfo(t *testing.T) {
 	require.NotNil(t, res["LTC"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 }

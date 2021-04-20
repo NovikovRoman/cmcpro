@@ -16,7 +16,9 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	require.NotNil(t, res["1"].Quote["EUR"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
 		[]uint{1}, NewConvertByCodes("RUB", "EUR"),
@@ -27,7 +29,9 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	require.NotNil(t, res["1"].Quote["EUR"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
 		[]uint{1}, nil,
@@ -37,7 +41,9 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	require.NotNil(t, res["1"].Quote["USD"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 1)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 1)
+	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
 		[]uint{10000000000}, nil,
@@ -57,7 +63,9 @@ func TestClient_CryptocurrencyOHLCVLatestBySymbol(t *testing.T) {
 	require.NotNil(t, res["LTC"].Quote["EUR"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestBySymbol(
 		[]string{"---"}, NewConvertByCodes("RUB", "EUR"),
@@ -81,7 +89,9 @@ func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
 	require.True(t, len(res.Quotes) <= 14)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.CryptocurrencyOHLCVHistoricalByID(
@@ -93,7 +103,9 @@ func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
 	require.True(t, len(res.Quotes) <= 5)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 }
 
 func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
@@ -110,7 +122,9 @@ func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
 	require.True(t, len(res.Quotes) <= 14)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.CryptocurrencyOHLCVHistoricalBySymbol(
@@ -122,5 +136,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
 	require.True(t, len(res.Quotes) <= 5)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
-	require.EqualValues(t, status.CreditCount, 2)
+	if prodTest {
+		require.EqualValues(t, status.CreditCount, 2)
+	}
 }
