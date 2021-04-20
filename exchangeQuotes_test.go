@@ -8,7 +8,7 @@ import (
 
 func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 	res, status, _ := cTest.ExchangeQuotesLatestByID(
-		[]uint{270}, NewConvertByCodes("RUB", "EUR"), // RUB, EUR
+		contextTest, []uint{270}, NewConvertByCodes("RUB", "EUR"), // RUB, EUR
 	)
 
 	require.Equal(t, res["270"].Slug, "binance")
@@ -19,7 +19,7 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 	}
 
 	res, status, _ = cTest.ExchangeQuotesLatestByID(
-		[]uint{270}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []uint{270}, NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.Equal(t, res["270"].Slug, "binance")
@@ -32,7 +32,7 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 	}
 
 	res, status, _ = cTest.ExchangeQuotesLatestByID(
-		[]uint{270}, nil,
+		contextTest, []uint{270}, nil,
 	)
 
 	require.Equal(t, res["270"].Slug, "binance")
@@ -44,7 +44,7 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 	}
 
 	res, status, _ = cTest.ExchangeQuotesLatestByID(
-		[]uint{1000000000}, nil,
+		contextTest, []uint{1000000000}, nil,
 	)
 
 	require.Equal(t, status.ErrorCode, 400)
@@ -53,7 +53,7 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 
 func TestClient_ExchangeQuotesLatestBySlug(t *testing.T) {
 	res, status, _ := cTest.ExchangeQuotesLatestBySlug(
-		[]string{"bittrex"}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []string{"bittrex"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.Equal(t, res["bittrex"].Slug, "bittrex")
@@ -66,7 +66,7 @@ func TestClient_ExchangeQuotesLatestBySlug(t *testing.T) {
 	}
 
 	res, status, _ = cTest.ExchangeQuotesLatestBySlug(
-		[]string{"---"}, nil,
+		contextTest, []string{"---"}, nil,
 	)
 
 	require.Equal(t, status.ErrorCode, 400)
@@ -79,7 +79,7 @@ func TestClient_ExchangeQuotesHistoricalByID(t *testing.T) {
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
 	res, status, _ := cTest.ExchangeQuotesHistoricalByID(
-		22, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, 22, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.EqualValues(t, res.ID, 22)
@@ -93,7 +93,7 @@ func TestClient_ExchangeQuotesHistoricalByID(t *testing.T) {
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.ExchangeQuotesHistoricalByID(
-		22, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, 22, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.EqualValues(t, res.ID, 22)
@@ -110,7 +110,7 @@ func TestClient_ExchangeQuotesHistoricalBySymbol(t *testing.T) {
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
 	res, status, _ := cTest.ExchangeQuotesHistoricalBySlug(
-		"bittrex", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, "bittrex", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.EqualValues(t, res.ID, 22)
@@ -124,7 +124,7 @@ func TestClient_ExchangeQuotesHistoricalBySymbol(t *testing.T) {
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.ExchangeQuotesHistoricalBySlug(
-		"bittrex", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, "bittrex", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.EqualValues(t, res.ID, 22)

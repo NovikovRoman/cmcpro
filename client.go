@@ -1,6 +1,7 @@
 package cmcpro
 
 import (
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
@@ -46,8 +47,8 @@ func (c *Client) exec(req *http.Request, obj interface{}) error {
 	return nil
 }
 
-func (c *Client) createRequest(link string) (*http.Request, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.ApiPoint, link), nil)
+func (c *Client) createRequest(ctx context.Context, link string) (*http.Request, error) {
+	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s%s", c.ApiPoint, link), nil)
 	if err != nil {
 		return nil, err
 	}

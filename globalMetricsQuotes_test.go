@@ -7,7 +7,7 @@ import (
 )
 
 func TestClient_GlobalMetricsQuotesLatest(t *testing.T) {
-	res, status, _ := cTest.GlobalMetricsQuotesLatest(NewConvertByCodes("RUB"))
+	res, status, _ := cTest.GlobalMetricsQuotesLatest(contextTest, NewConvertByCodes("RUB"))
 
 	require.True(t, res.ActiveMarketPairs > 10)
 	require.True(t, res.Quote["RUB"].TotalMarketCap > 1000.0)
@@ -24,7 +24,7 @@ func TestClient_GlobalMetricsQuotesHistorical(t *testing.T) {
 	timeEnd := time.Now().Add(-time.Hour * 24 * 7 * 2)
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
-	res, status, _ := cTest.GlobalMetricsQuotesHistorical(perioder, NewConvertByCodes("RUB"))
+	res, status, _ := cTest.GlobalMetricsQuotesHistorical(contextTest, perioder, NewConvertByCodes("RUB"))
 
 	require.True(t, len(res.Quotes) > 0)
 	require.True(t, len(res.Quotes) <= 14)

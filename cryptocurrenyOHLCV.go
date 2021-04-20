@@ -1,13 +1,14 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
 	"strconv"
 	"strings"
 )
 
-func (c *Client) CryptocurrencyOHLCVLatestByID(id []uint, converter Converter) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyOHLCVLatestByID(ctx context.Context, id []uint, converter Converter) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
 
 	ids := make([]string, len(id))
 	for k, v := range id {
@@ -18,25 +19,21 @@ func (c *Client) CryptocurrencyOHLCVLatestByID(id []uint, converter Converter) (
 		"id": strings.Join(ids, ","),
 	}
 
-	return c.cryptocurrencyOHLCVLatest(params, converter)
+	return c.cryptocurrencyOHLCVLatest(ctx, params, converter)
 }
 
-func (c *Client) CryptocurrencyOHLCVLatestBySymbol(symbol []string, converter Converter) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyOHLCVLatestBySymbol(ctx context.Context, symbol []string, converter Converter) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
 
 	params := map[string]string{
 		"symbol": strings.Join(symbol, ","),
 	}
 
-	return c.cryptocurrencyOHLCVLatest(params, converter)
+	return c.cryptocurrencyOHLCVLatest(ctx, params, converter)
 }
 
-func (c *Client) cryptocurrencyOHLCVLatest(
-	params map[string]string,
-	converter Converter,
-) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
+func (c *Client) cryptocurrencyOHLCVLatest(ctx context.Context, params map[string]string, converter Converter) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
 
-	req, err := c.createCryptocurrencyOHLCVRequest(
-		"/cryptocurrency/ohlcv/latest", params, nil, "", converter)
+	req, err := c.createCryptocurrencyOHLCVRequest(ctx, "/cryptocurrency/ohlcv/latest", params, nil, "", converter)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -53,37 +50,28 @@ func (c *Client) cryptocurrencyOHLCVLatest(
 	return respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) CryptocurrencyOHLCVHistoricalByID(
-	id uint,
-	perioder Perioder,
-	interval string,
-	converter Converter,
-) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
+func (c *Client) CryptocurrencyOHLCVHistoricalByID(ctx context.Context, id uint, perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
 
 	params := map[string]string{
 		"id": strconv.FormatUint(uint64(id), 10),
 	}
 
-	return c.cryptocurrencyOHLCVHistorical(params, perioder, interval, converter)
+	return c.cryptocurrencyOHLCVHistorical(ctx, params, perioder, interval, converter)
 }
 
-func (c *Client) CryptocurrencyOHLCVHistoricalBySymbol(
-	symbol string,
-	perioder Perioder,
-	interval string,
-	converter Converter,
-) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
+func (c *Client) CryptocurrencyOHLCVHistoricalBySymbol(ctx context.Context, symbol string,
+	perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
 
 	params := map[string]string{
 		"symbol": symbol,
 	}
 
-	return c.cryptocurrencyOHLCVHistorical(params, perioder, interval, converter)
+	return c.cryptocurrencyOHLCVHistorical(ctx, params, perioder, interval, converter)
 }
 
-func (c *Client) cryptocurrencyOHLCVHistorical(params map[string]string, perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
+func (c *Client) cryptocurrencyOHLCVHistorical(ctx context.Context, params map[string]string, perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
 
-	req, err := c.createCryptocurrencyOHLCVRequest(
+	req, err := c.createCryptocurrencyOHLCVRequest(ctx,
 		"/cryptocurrency/ohlcv/historical", params, perioder, interval, converter)
 	if err != nil {
 		return nil, nil, err
@@ -101,9 +89,9 @@ func (c *Client) cryptocurrencyOHLCVHistorical(params map[string]string, periode
 	return respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) createCryptocurrencyOHLCVRequest(link string, params map[string]string, perioder Perioder, interval string, converter Converter) (*http.Request, error) {
+func (c *Client) createCryptocurrencyOHLCVRequest(ctx context.Context, link string, params map[string]string, perioder Perioder, interval string, converter Converter) (*http.Request, error) {
 
-	req, err := c.createRequest(link)
+	req, err := c.createRequest(ctx, link)
 	if err != nil {
 		return nil, err
 	}

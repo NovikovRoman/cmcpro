@@ -6,7 +6,7 @@ import (
 )
 
 func TestClient_ExchangeInfo(t *testing.T) {
-	res, status, _ := cTest.ExchangeInfoByID([]uint{270, 16})
+	res, status, _ := cTest.ExchangeInfoByID(contextTest, []uint{270, 16})
 
 	require.Len(t, res, 2)
 	require.NotNil(t, res["270"])
@@ -17,7 +17,7 @@ func TestClient_ExchangeInfo(t *testing.T) {
 		require.EqualValues(t, status.CreditCount, 1)
 	}
 
-	res, status, _ = cTest.ExchangeInfoBySlug([]string{"binance", "poloniex"})
+	res, status, _ = cTest.ExchangeInfoBySlug(contextTest, []string{"binance", "poloniex"})
 
 	require.Len(t, res, 2)
 	require.NotNil(t, res["binance"])

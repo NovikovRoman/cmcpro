@@ -1,30 +1,19 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
 	"strconv"
 	"time"
 )
 
-func (c *Client) CryptocurrencyListingsLatest(
-	start uint,
-	limit uint,
-	sort string,
-	sortDir string,
-	converter Converter,
-	cryptocurrencyType string,
+func (c *Client) CryptocurrencyListingsLatest(ctx context.Context, start uint, limit uint, sort string, sortDir string,
+	converter Converter, cryptocurrencyType string,
 ) ([]*types.CryptocurrencyLatest, *types.Status, error) {
 
-	req, err := c.createCryptocurrencyListingsRequest(
-		"/cryptocurrency/listings/latest",
-		map[string]string{},
-		start,
-		limit,
-		sort,
-		sortDir,
-		converter,
-		cryptocurrencyType,
+	req, err := c.createCryptocurrencyListingsRequest(ctx, "/cryptocurrency/listings/latest",
+		map[string]string{}, start, limit, sort, sortDir, converter, cryptocurrencyType,
 	)
 
 	if err != nil {
@@ -43,29 +32,16 @@ func (c *Client) CryptocurrencyListingsLatest(
 	return respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) CryptocurrencyListingsHistorical(
-	date time.Time,
-	start uint,
-	limit uint,
-	sort string,
-	sortDir string,
-	converter Converter,
-	cryptocurrencyType string,
+func (c *Client) CryptocurrencyListingsHistorical(ctx context.Context, date time.Time,
+	start uint, limit uint, sort string, sortDir string, converter Converter, cryptocurrencyType string,
 ) ([]*types.CryptocurrencyHistorical, *types.Status, error) {
 
 	params := map[string]string{
 		"date": date.Format(time.RFC3339),
 	}
 
-	req, err := c.createCryptocurrencyListingsRequest(
-		"/cryptocurrency/listings/historical",
-		params,
-		start,
-		limit,
-		sort,
-		sortDir,
-		converter,
-		cryptocurrencyType,
+	req, err := c.createCryptocurrencyListingsRequest(ctx, "/cryptocurrency/listings/historical",
+		params, start, limit, sort, sortDir, converter, cryptocurrencyType,
 	)
 
 	if err != nil {
@@ -77,25 +53,19 @@ func (c *Client) CryptocurrencyListingsHistorical(
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &respInfo); err != nil {
 		return nil, nil, err
 	}
 
 	return respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) createCryptocurrencyListingsRequest(
-	link string,
-	params map[string]string,
-	start uint,
-	limit uint,
-	sort string,
-	sortDir string,
-	converter Converter,
-	cryptocurrencyType string,
+func (c *Client) createCryptocurrencyListingsRequest(ctx context.Context, link string,
+	params map[string]string, start uint, limit uint, sort string, sortDir string,
+	converter Converter, cryptocurrencyType string,
 ) (*http.Request, error) {
 
-	req, err := c.createRequest(link)
+	req, err := c.createRequest(ctx, link)
 	if err != nil {
 		return nil, err
 	}

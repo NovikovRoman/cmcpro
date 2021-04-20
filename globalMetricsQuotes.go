@@ -1,13 +1,14 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
 )
 
-func (c *Client) GlobalMetricsQuotesLatest(converter Converter) (*types.GlobalMetricsQuotesLatest, *types.Status, error) {
+func (c *Client) GlobalMetricsQuotesLatest(ctx context.Context, converter Converter) (*types.GlobalMetricsQuotesLatest, *types.Status, error) {
 
-	req, err := c.createGlobalMetricsQuotesRequest("/global-metrics/quotes/latest", nil, converter)
+	req, err := c.createGlobalMetricsQuotesRequest(ctx, "/global-metrics/quotes/latest", nil, converter)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -17,16 +18,16 @@ func (c *Client) GlobalMetricsQuotesLatest(converter Converter) (*types.GlobalMe
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &respInfo); err != nil {
 		return nil, nil, err
 	}
 
 	return &respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) GlobalMetricsQuotesHistorical(perioder Perioder, converter Converter) (*types.GlobalMetricsQuotesHistorical, *types.Status, error) {
+func (c *Client) GlobalMetricsQuotesHistorical(ctx context.Context, perioder Perioder, converter Converter) (*types.GlobalMetricsQuotesHistorical, *types.Status, error) {
 
-	req, err := c.createGlobalMetricsQuotesRequest("/global-metrics/quotes/historical", perioder, converter)
+	req, err := c.createGlobalMetricsQuotesRequest(ctx, "/global-metrics/quotes/historical", perioder, converter)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -36,15 +37,15 @@ func (c *Client) GlobalMetricsQuotesHistorical(perioder Perioder, converter Conv
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &respInfo); err != nil {
 		return nil, nil, err
 	}
 
 	return &respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) createGlobalMetricsQuotesRequest(link string, perioder Perioder, converter Converter) (*http.Request, error) {
-	req, err := c.createRequest(link)
+func (c *Client) createGlobalMetricsQuotesRequest(ctx context.Context, link string, perioder Perioder, converter Converter) (*http.Request, error) {
+	req, err := c.createRequest(ctx, link)
 	if err != nil {
 		return nil, err
 	}

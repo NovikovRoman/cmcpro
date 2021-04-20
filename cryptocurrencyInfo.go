@@ -1,12 +1,13 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"strconv"
 	"strings"
 )
 
-func (c *Client) CryptocurrencyInfoByID(id []uint) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
+func (c *Client) CryptocurrencyInfoByID(ctx context.Context, id []uint) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
 	ids := make([]string, len(id))
 
 	for k, v := range id {
@@ -17,27 +18,27 @@ func (c *Client) CryptocurrencyInfoByID(id []uint) (map[string]*types.Cryptocurr
 		"id": strings.Join(ids, ","),
 	}
 
-	return c.cryptocurrencyInfo(params)
+	return c.cryptocurrencyInfo(ctx, params)
 }
 
-func (c *Client) CryptocurrencyInfoBySlug(slug []string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
+func (c *Client) CryptocurrencyInfoBySlug(ctx context.Context, slug []string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
 	params := map[string]string{
 		"slug": strings.Join(slug, ","),
 	}
 
-	return c.cryptocurrencyInfo(params)
+	return c.cryptocurrencyInfo(ctx, params)
 }
 
-func (c *Client) CryptocurrencyInfoBySymbol(symbol []string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
+func (c *Client) CryptocurrencyInfoBySymbol(ctx context.Context, symbol []string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
 	params := map[string]string{
 		"symbol": strings.Join(symbol, ","),
 	}
 
-	return c.cryptocurrencyInfo(params)
+	return c.cryptocurrencyInfo(ctx, params)
 }
 
-func (c *Client) cryptocurrencyInfo(params map[string]string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
-	req, err := c.createRequest("/cryptocurrency/info")
+func (c *Client) cryptocurrencyInfo(ctx context.Context, params map[string]string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
+	req, err := c.createRequest(ctx, "/cryptocurrency/info")
 	if err != nil {
 		return nil, nil, err
 	}

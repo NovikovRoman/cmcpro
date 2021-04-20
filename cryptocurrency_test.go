@@ -8,7 +8,7 @@ import (
 
 func TestClient_CryptocurrencyListingsLatest(t *testing.T) {
 	res, status, _ := cTest.CryptocurrencyListingsLatest(
-		1, 10, "symbol", "asc",
+		contextTest, 1, 10, "symbol", "asc",
 		NewConvertByCodes("USD"), "",
 	)
 
@@ -24,7 +24,7 @@ func TestClient_CryptocurrencyListingsHistorical(t *testing.T) {
 	date := time.Now().Add(-time.Hour * 24 * 7 * 4)
 
 	res, status, _ := cTest.CryptocurrencyListingsHistorical(
-		date, 1, 10, "symbol", "asc",
+		contextTest, date, 1, 10, "symbol", "asc",
 		NewConvertByCodes("USD"), "all",
 	)
 

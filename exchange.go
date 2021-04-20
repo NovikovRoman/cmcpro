@@ -1,31 +1,18 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
 	"strconv"
 	"time"
 )
 
-func (c *Client) ExchangeListingsLatest(
-	start uint,
-	limit uint,
-	sort string,
-	sortDir string,
-	converter Converter,
-	marketType string,
-) ([]*types.ExchangeLatest, *types.Status, error) {
+func (c *Client) ExchangeListingsLatest(ctx context.Context, start uint,
+	limit uint, sort string, sortDir string, converter Converter, marketType string) ([]*types.ExchangeLatest, *types.Status, error) {
 
-	req, err := c.createExchangeListingsRequest(
-		"/exchange/listings/latest",
-		map[string]string{},
-		start,
-		limit,
-		sort,
-		sortDir,
-		converter,
-		marketType,
-	)
+	req, err := c.createExchangeListingsRequest(ctx, "/exchange/listings/latest",
+		map[string]string{}, start, limit, sort, sortDir, converter, marketType)
 
 	if err != nil {
 		return nil, nil, err
@@ -36,37 +23,21 @@ func (c *Client) ExchangeListingsLatest(
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &respInfo); err != nil {
 		return nil, nil, err
 	}
 
 	return respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) ExchangeListingsHistorical(
-	date time.Time,
-	start uint,
-	limit uint,
-	sort string,
-	sortDir string,
-	converter Converter,
-	marketType string,
-) ([]*types.ExchangeHistorical, *types.Status, error) {
+func (c *Client) ExchangeListingsHistorical(ctx context.Context, date time.Time, start uint, limit uint, sort string, sortDir string, converter Converter, marketType string) ([]*types.ExchangeHistorical, *types.Status, error) {
 
 	params := map[string]string{
 		"date": date.Format(time.RFC3339),
 	}
 
-	req, err := c.createExchangeListingsRequest(
-		"/exchange/listings/historical",
-		params,
-		start,
-		limit,
-		sort,
-		sortDir,
-		converter,
-		marketType,
-	)
+	req, err := c.createExchangeListingsRequest(ctx, "/exchange/listings/historical",
+		params, start, limit, sort, sortDir, converter, marketType)
 
 	if err != nil {
 		return nil, nil, err
@@ -77,25 +48,16 @@ func (c *Client) ExchangeListingsHistorical(
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &respInfo); err != nil {
 		return nil, nil, err
 	}
 
 	return respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) createExchangeListingsRequest(
-	link string,
-	params map[string]string,
-	start uint,
-	limit uint,
-	sort string,
-	sortDir string,
-	converter Converter,
-	marketType string,
-) (*http.Request, error) {
+func (c *Client) createExchangeListingsRequest(ctx context.Context, link string, params map[string]string, start uint, limit uint, sort string, sortDir string, converter Converter, marketType string) (*http.Request, error) {
 
-	req, err := c.createRequest(link)
+	req, err := c.createRequest(ctx, link)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +86,7 @@ func (c *Client) createExchangeListingsRequest(
 
 	if sort != "" {
 		query.Add("sort", sort)
-		sort := "asc"
+		sort = "asc"
 
 		if sortDir != "" {
 			sort = sortDir

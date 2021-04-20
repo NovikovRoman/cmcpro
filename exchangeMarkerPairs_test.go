@@ -7,7 +7,7 @@ import (
 
 func TestClient_ExchangeMarketPair(t *testing.T) {
 	res, status, _ := cTest.ExchangeMarketPairByID(
-		22, 1, 5, NewConvertByCodes("RUB"),
+		contextTest, 22, 1, 5, NewConvertByCodes("RUB"),
 	)
 
 	require.Equal(t, res.Name, "Bittrex")
@@ -22,7 +22,7 @@ func TestClient_ExchangeMarketPair(t *testing.T) {
 	}
 
 	res, status, _ = cTest.ExchangeMarketPairBySlug(
-		"bittrex", 1, 5, NewConvertByCodes("RUB"),
+		contextTest, "bittrex", 1, 5, NewConvertByCodes("RUB"),
 	)
 
 	require.Equal(t, res.Name, "Bittrex")

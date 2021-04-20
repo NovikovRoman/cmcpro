@@ -7,7 +7,7 @@ import (
 
 func TestClient_ToolsPriceConversion(t *testing.T) {
 	res, status, _ := cTest.ToolsPriceConversionByID(
-		10, 1, NewConvertByCodes("RUB"), nil,
+		contextTest, 10, 1, NewConvertByCodes("RUB"), nil,
 	)
 
 	require.Equal(t, res.Name, "Bitcoin")
@@ -20,7 +20,7 @@ func TestClient_ToolsPriceConversion(t *testing.T) {
 	}
 
 	res, status, _ = cTest.ToolsPriceConversionBySymbol(
-		10, "BTC", NewConvertByCodes("RUB"), nil,
+		contextTest, 10, "BTC", NewConvertByCodes("RUB"), nil,
 	)
 
 	require.Equal(t, res.Name, "Bitcoin")

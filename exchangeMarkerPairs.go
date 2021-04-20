@@ -1,46 +1,32 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"strconv"
 )
 
-func (c *Client) ExchangeMarketPairByID(
-	id uint,
-	start uint,
-	limit uint,
-	converter Converter,
-) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
+func (c *Client) ExchangeMarketPairByID(ctx context.Context, id uint, start uint, limit uint, converter Converter) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
 
 	params := map[string]string{
 		"id": strconv.FormatUint(uint64(id), 10),
 	}
 
-	return c.exchangeMarketPair(params, start, limit, converter)
+	return c.exchangeMarketPair(ctx, params, start, limit, converter)
 }
 
-func (c *Client) ExchangeMarketPairBySlug(
-	slug string,
-	start uint,
-	limit uint,
-	converter Converter,
-) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
+func (c *Client) ExchangeMarketPairBySlug(ctx context.Context, slug string, start uint, limit uint, converter Converter) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
 
 	params := map[string]string{
 		"slug": slug,
 	}
 
-	return c.exchangeMarketPair(params, start, limit, converter)
+	return c.exchangeMarketPair(ctx, params, start, limit, converter)
 }
 
-func (c *Client) exchangeMarketPair(
-	params map[string]string,
-	start uint,
-	limit uint,
-	converter Converter,
-) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
+func (c *Client) exchangeMarketPair(ctx context.Context, params map[string]string, start uint, limit uint, converter Converter) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
 
-	req, err := c.createRequest("/exchange/market-pairs/latest")
+	req, err := c.createRequest(ctx, "/exchange/market-pairs/latest")
 	if err != nil {
 		return nil, nil, err
 	}
@@ -74,7 +60,7 @@ func (c *Client) exchangeMarketPair(
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &respInfo); err != nil {
 		return nil, nil, err
 	}
 

@@ -12,7 +12,7 @@ func TestClient_KeyInfo(t *testing.T) {
 		status *types.Status
 		err    error
 	)
-	res, status, err = cTest.KeyInfo()
+	res, status, err = cTest.KeyInfo(contextTest)
 	require.Nil(t, err)
 
 	require.NotNil(t, res.Usage)

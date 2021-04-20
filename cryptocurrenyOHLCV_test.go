@@ -8,7 +8,7 @@ import (
 
 func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	res, status, _ := cTest.CryptocurrencyOHLCVLatestByID(
-		[]uint{1}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []uint{1}, NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.Equal(t, res["1"].Name, "Bitcoin")
@@ -21,7 +21,7 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
-		[]uint{1}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []uint{1}, NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.Equal(t, res["1"].Name, "Bitcoin")
@@ -34,7 +34,7 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
-		[]uint{1}, nil,
+		contextTest, []uint{1}, nil,
 	)
 
 	require.Equal(t, res["1"].Name, "Bitcoin")
@@ -46,7 +46,7 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
-		[]uint{10000000000}, nil,
+		contextTest, []uint{10000000000}, nil,
 	)
 
 	require.Equal(t, status.ErrorCode, 400)
@@ -55,7 +55,7 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 
 func TestClient_CryptocurrencyOHLCVLatestBySymbol(t *testing.T) {
 	res, status, _ := cTest.CryptocurrencyOHLCVLatestBySymbol(
-		[]string{"LTC"}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []string{"LTC"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.Equal(t, res["LTC"].Name, "Litecoin")
@@ -68,7 +68,7 @@ func TestClient_CryptocurrencyOHLCVLatestBySymbol(t *testing.T) {
 	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestBySymbol(
-		[]string{"---"}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []string{"---"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.Equal(t, status.ErrorCode, 400)
@@ -81,7 +81,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
 	res, status, _ := cTest.CryptocurrencyOHLCVHistoricalByID(
-		1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, 1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.EqualValues(t, res.ID, 1)
@@ -95,7 +95,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.CryptocurrencyOHLCVHistoricalByID(
-		1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, 1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.EqualValues(t, res.ID, 1)
@@ -114,7 +114,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
 	res, status, _ := cTest.CryptocurrencyOHLCVHistoricalBySymbol(
-		"BTC", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, "BTC", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.EqualValues(t, res.ID, 1)
@@ -128,7 +128,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.CryptocurrencyOHLCVHistoricalBySymbol(
-		"BTC", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, "BTC", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
 	require.EqualValues(t, res.ID, 1)

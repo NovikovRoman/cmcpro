@@ -6,7 +6,7 @@ import (
 )
 
 func TestClient_CryptocurrencyMap(t *testing.T) {
-	res, status, _ := cTest.CryptocurrencyMap(true, 1, 10)
+	res, status, _ := cTest.CryptocurrencyMap(contextTest, true, 1, 10)
 
 	require.Len(t, res, 10)
 	require.Equal(t, status.ErrorCode, 0)
@@ -15,7 +15,7 @@ func TestClient_CryptocurrencyMap(t *testing.T) {
 		require.EqualValues(t, status.CreditCount, 1)
 	}
 
-	res, status, _ = cTest.CryptocurrencyMapBySymbol([]string{"BTC", "LTC"})
+	res, status, _ = cTest.CryptocurrencyMapBySymbol(contextTest, []string{"BTC", "LTC"})
 
 	require.Len(t, res, 2)
 	require.Equal(t, status.ErrorCode, 0)

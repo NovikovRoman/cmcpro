@@ -1,16 +1,17 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
 )
 
-func (c *Client) KeyInfo() (keyInfo *types.KeyInfo, status *types.Status, err error) {
+func (c *Client) KeyInfo(ctx context.Context) (keyInfo *types.KeyInfo, status *types.Status, err error) {
 	var (
 		req *http.Request
 	)
 
-	if req, err = c.createRequest("/key/info"); err != nil {
+	if req, err = c.createRequest(ctx, "/key/info"); err != nil {
 		return
 	}
 

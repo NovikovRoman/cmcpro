@@ -1,46 +1,34 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"strconv"
 )
 
-func (c *Client) CryptocurrencyMarketPairByID(
-	id uint,
-	start uint,
-	limit uint,
-	converter Converter,
-) (*types.CryptocurrencyMarketPairsLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyMarketPairByID(ctx context.Context, id uint, start uint,
+	limit uint, converter Converter) (*types.CryptocurrencyMarketPairsLatest, *types.Status, error) {
 
 	params := map[string]string{
 		"id": strconv.FormatUint(uint64(id), 10),
 	}
 
-	return c.cryptocurrencyMarketPair(params, start, limit, converter)
+	return c.cryptocurrencyMarketPair(ctx, params, start, limit, converter)
 }
 
-func (c *Client) CryptocurrencyMarketPairBySymbol(
-	symbol string,
-	start uint,
-	limit uint,
-	converter Converter,
-) (*types.CryptocurrencyMarketPairsLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyMarketPairBySymbol(ctx context.Context, symbol string, start uint, limit uint, converter Converter) (*types.CryptocurrencyMarketPairsLatest, *types.Status, error) {
 
 	params := map[string]string{
 		"symbol": symbol,
 	}
 
-	return c.cryptocurrencyMarketPair(params, start, limit, converter)
+	return c.cryptocurrencyMarketPair(ctx, params, start, limit, converter)
 }
 
-func (c *Client) cryptocurrencyMarketPair(
-	params map[string]string,
-	start uint,
-	limit uint,
-	converter Converter,
-) (*types.CryptocurrencyMarketPairsLatest, *types.Status, error) {
+func (c *Client) cryptocurrencyMarketPair(ctx context.Context, params map[string]string,
+	start uint, limit uint, converter Converter) (*types.CryptocurrencyMarketPairsLatest, *types.Status, error) {
 
-	req, err := c.createRequest("/cryptocurrency/market-pairs/latest")
+	req, err := c.createRequest(ctx, "/cryptocurrency/market-pairs/latest")
 	if err != nil {
 		return nil, nil, err
 	}
@@ -74,7 +62,7 @@ func (c *Client) cryptocurrencyMarketPair(
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &respInfo); err != nil {
 		return nil, nil, err
 	}
 

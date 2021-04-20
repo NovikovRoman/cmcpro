@@ -1,24 +1,25 @@
 package cmcpro
 
 import (
+	"context"
 	"github.com/NovikovRoman/cmcpro/types"
 	"strconv"
 	"strings"
 )
 
-func (c *Client) CryptocurrencyMap(active bool, start uint, limit uint) ([]*types.CryptocurrencyMap, *types.Status, error) {
-	return c.cryptocurrencyMap(map[string]string{}, active, start, limit)
+func (c *Client) CryptocurrencyMap(ctx context.Context, active bool, start uint, limit uint) ([]*types.CryptocurrencyMap, *types.Status, error) {
+	return c.cryptocurrencyMap(ctx, map[string]string{}, active, start, limit)
 }
 
-func (c *Client) CryptocurrencyMapBySymbol(symbol []string) ([]*types.CryptocurrencyMap, *types.Status, error) {
+func (c *Client) CryptocurrencyMapBySymbol(ctx context.Context, symbol []string) ([]*types.CryptocurrencyMap, *types.Status, error) {
 	params := map[string]string{
 		"symbol": strings.Join(symbol, ","),
 	}
-	return c.cryptocurrencyMap(params, false, 0, 0)
+	return c.cryptocurrencyMap(ctx, params, false, 0, 0)
 }
 
-func (c *Client) cryptocurrencyMap(params map[string]string, active bool, start uint, limit uint) ([]*types.CryptocurrencyMap, *types.Status, error) {
-	req, err := c.createRequest("/cryptocurrency/map")
+func (c *Client) cryptocurrencyMap(ctx context.Context, params map[string]string, active bool, start uint, limit uint) ([]*types.CryptocurrencyMap, *types.Status, error) {
+	req, err := c.createRequest(ctx, "/cryptocurrency/map")
 	if err != nil {
 		return nil, nil, err
 	}
@@ -54,7 +55,7 @@ func (c *Client) cryptocurrencyMap(params map[string]string, active bool, start 
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &respInfo); err != nil {
 		return nil, nil, err
 	}
 
