@@ -13,16 +13,16 @@ type KeyInfo struct {
 
 	Usage struct {
 		Minute struct {
-			RequestsMade int    `json:"requests_made"`
-			RequestsLeft string `json:"requests_left"`
+			RequestsMade int `json:"requests_made"`
+			RequestsLeft int `json:"requests_left"`
 		} `json:"minute"`
 		CurrentDay struct {
-			CreditsUsed int    `json:"credits_used"`
-			CreditsLeft string `json:"credits_left"`
+			CreditsUsed int `json:"credits_used"`
+			CreditsLeft int `json:"credits_left"`
 		} `json:"current_day"`
 		CurrentMonth struct {
-			CreditsUsed int    `json:"credits_used"`
-			CreditsLeft string `json:"credits_left"`
+			CreditsUsed int `json:"credits_used"`
+			CreditsLeft int `json:"credits_left"`
 		} `json:"current_month"`
 	} `json:"usage"`
 }

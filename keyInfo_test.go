@@ -17,5 +17,5 @@ func TestClient_KeyInfo(t *testing.T) {
 
 	require.NotNil(t, res.Usage)
 	require.NotNil(t, res.Plan)
-	require.Equal(t, status.CreditCount, 0)
+	require.EqualValues(t, status.CreditCount, 0)
 }
