@@ -2,14 +2,11 @@ package cmcpro
 
 import (
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 )
 
 func TestClient_ExchangeListingsLatest(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.ExchangeListingsLatest(
+	res, status, _ := cTest.ExchangeListingsLatest(
 		1, 2, "name", "asc",
 		NewConvertByCodes("USD"), "",
 	)

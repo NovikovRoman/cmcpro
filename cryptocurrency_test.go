@@ -2,15 +2,12 @@ package cmcpro
 
 import (
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 	"time"
 )
 
 func TestClient_CryptocurrencyListingsLatest(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.CryptocurrencyListingsLatest(
+	res, status, _ := cTest.CryptocurrencyListingsLatest(
 		1, 10, "symbol", "asc",
 		NewConvertByCodes("USD"), "",
 	)
@@ -22,11 +19,9 @@ func TestClient_CryptocurrencyListingsLatest(t *testing.T) {
 }
 
 func TestClient_CryptocurrencyListingsHistorical(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
+	date := time.Now().Add(-time.Hour * 24 * 7 * 4)
 
-	date := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 4))
-
-	res, status, _ := c.CryptocurrencyListingsHistorical(
+	res, status, _ := cTest.CryptocurrencyListingsHistorical(
 		date, 1, 10, "symbol", "asc",
 		NewConvertByCodes("USD"), "",
 	)

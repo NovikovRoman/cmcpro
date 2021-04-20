@@ -2,14 +2,11 @@ package cmcpro
 
 import (
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 )
 
 func TestClient_CryptocurrencyInfo(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.CryptocurrencyInfoByID([]uint{1, 1027})
+	res, status, _ := cTest.CryptocurrencyInfoByID([]uint{1, 1027})
 
 	require.Len(t, res, 2)
 	require.NotNil(t, res["1"])
@@ -18,7 +15,7 @@ func TestClient_CryptocurrencyInfo(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 1)
 
-	res, status, _ = c.CryptocurrencyInfoBySlug([]string{"bitcoin", "litecoin"})
+	res, status, _ = cTest.CryptocurrencyInfoBySlug([]string{"bitcoin", "litecoin"})
 
 	require.Len(t, res, 2)
 	require.NotNil(t, res["1"])
@@ -27,7 +24,7 @@ func TestClient_CryptocurrencyInfo(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 1)
 
-	res, status, _ = c.CryptocurrencyInfoBySymbol([]string{"BTC", "LTC"})
+	res, status, _ = cTest.CryptocurrencyInfoBySymbol([]string{"BTC", "LTC"})
 
 	require.Len(t, res, 2)
 	require.NotNil(t, res["BTC"])

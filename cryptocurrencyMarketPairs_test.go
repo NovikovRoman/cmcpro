@@ -2,14 +2,11 @@ package cmcpro
 
 import (
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 )
 
 func TestClient_CryptocurrencyMarketPair(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.CryptocurrencyMarketPairByID(
+	res, status, _ := cTest.CryptocurrencyMarketPairByID(
 		1, 1, 5, NewConvertByCodes("RUB"),
 	)
 
@@ -22,7 +19,7 @@ func TestClient_CryptocurrencyMarketPair(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 1)
 
-	res, status, _ = c.CryptocurrencyMarketPairBySymbol(
+	res, status, _ = cTest.CryptocurrencyMarketPairBySymbol(
 		"BTC", 1, 5, NewConvertByCodes("RUB"),
 	)
 

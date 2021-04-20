@@ -2,15 +2,12 @@ package cmcpro
 
 import (
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 	"time"
 )
 
 func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.CryptocurrencyQuotesLatestByID(
+	res, status, _ := cTest.CryptocurrencyQuotesLatestByID(
 		[]uint{1}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -21,7 +18,7 @@ func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.CryptocurrencyQuotesLatestByID(
+	res, status, _ = cTest.CryptocurrencyQuotesLatestByID(
 		[]uint{1}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -32,7 +29,7 @@ func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.CryptocurrencyQuotesLatestByID(
+	res, status, _ = cTest.CryptocurrencyQuotesLatestByID(
 		[]uint{1}, nil,
 	)
 
@@ -42,7 +39,7 @@ func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 1)
 
-	res, status, _ = c.CryptocurrencyQuotesLatestByID(
+	res, status, _ = cTest.CryptocurrencyQuotesLatestByID(
 		[]uint{1000000000}, nil,
 	)
 
@@ -51,9 +48,7 @@ func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
 }
 
 func TestClient_CryptocurrencyQuotesLatestBySlug(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.CryptocurrencyQuotesLatestBySlug(
+	res, status, _ := cTest.CryptocurrencyQuotesLatestBySlug(
 		[]string{"ethereum"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -64,7 +59,7 @@ func TestClient_CryptocurrencyQuotesLatestBySlug(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.CryptocurrencyQuotesLatestBySlug(
+	res, status, _ = cTest.CryptocurrencyQuotesLatestBySlug(
 		[]string{"---"}, nil,
 	)
 
@@ -73,8 +68,7 @@ func TestClient_CryptocurrencyQuotesLatestBySlug(t *testing.T) {
 }
 
 func TestClient_CryptocurrencyQuotesLatestBySymbol(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-	res, status, _ := c.CryptocurrencyQuotesLatestBySymbol(
+	res, status, _ := cTest.CryptocurrencyQuotesLatestBySymbol(
 		[]string{"LTC"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -85,7 +79,7 @@ func TestClient_CryptocurrencyQuotesLatestBySymbol(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.CryptocurrencyQuotesLatestBySymbol(
+	res, status, _ = cTest.CryptocurrencyQuotesLatestBySymbol(
 		[]string{"---"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -94,13 +88,11 @@ func TestClient_CryptocurrencyQuotesLatestBySymbol(t *testing.T) {
 }
 
 func TestClient_CryptocurrencyQuotesHistoricalByID(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	timeStart := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 6))
-	timeEnd := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 2))
+	timeStart := time.Now().Add(-time.Hour * 24 * 7 * 6)
+	timeEnd := time.Now().Add(-time.Hour * 24 * 7 * 2)
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
-	res, status, _ := c.CryptocurrencyQuotesHistoricalByID(
+	res, status, _ := cTest.CryptocurrencyQuotesHistoricalByID(
 		1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -112,7 +104,7 @@ func TestClient_CryptocurrencyQuotesHistoricalByID(t *testing.T) {
 	require.EqualValues(t, status.CreditCount, 2)
 
 	perioder = NewPeriod(&timeStart, nil, 5)
-	res, status, _ = c.CryptocurrencyQuotesHistoricalByID(
+	res, status, _ = cTest.CryptocurrencyQuotesHistoricalByID(
 		1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -125,13 +117,11 @@ func TestClient_CryptocurrencyQuotesHistoricalByID(t *testing.T) {
 }
 
 func TestClient_CryptocurrencyQuotesHistoricalBySymbol(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	timeStart := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 6))
-	timeEnd := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 2))
+	timeStart := time.Now().Add(-time.Hour * 24 * 7 * 6)
+	timeEnd := time.Now().Add(-time.Hour * 24 * 7 * 2)
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
-	res, status, _ := c.CryptocurrencyQuotesHistoricalBySymbol(
+	res, status, _ := cTest.CryptocurrencyQuotesHistoricalBySymbol(
 		"BTC", perioder, "1d", NewConvertByCodes("USD"),
 	)
 
@@ -143,7 +133,7 @@ func TestClient_CryptocurrencyQuotesHistoricalBySymbol(t *testing.T) {
 	require.EqualValues(t, status.CreditCount, 1)
 
 	perioder = NewPeriod(&timeStart, nil, 5)
-	res, status, _ = c.CryptocurrencyQuotesHistoricalBySymbol(
+	res, status, _ = cTest.CryptocurrencyQuotesHistoricalBySymbol(
 		"BTC", perioder, "7d", NewConvertByCodes("RUB", "EUR"),
 	)
 

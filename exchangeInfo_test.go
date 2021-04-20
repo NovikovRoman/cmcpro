@@ -2,14 +2,11 @@ package cmcpro
 
 import (
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 )
 
 func TestClient_ExchangeInfo(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.ExchangeInfoByID([]uint{270, 16})
+	res, status, _ := cTest.ExchangeInfoByID([]uint{270, 16})
 
 	require.Len(t, res, 2)
 	require.NotNil(t, res["270"])
@@ -18,7 +15,7 @@ func TestClient_ExchangeInfo(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 1)
 
-	res, status, _ = c.ExchangeInfoBySlug([]string{"binance", "poloniex"})
+	res, status, _ = cTest.ExchangeInfoBySlug([]string{"binance", "poloniex"})
 
 	require.Len(t, res, 2)
 	require.NotNil(t, res["binance"])

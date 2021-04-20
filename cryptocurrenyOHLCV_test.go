@@ -2,15 +2,12 @@ package cmcpro
 
 import (
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 	"time"
 )
 
 func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.CryptocurrencyOHLCVLatestByID(
+	res, status, _ := cTest.CryptocurrencyOHLCVLatestByID(
 		[]uint{1}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -21,7 +18,7 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.CryptocurrencyOHLCVLatestByID(
+	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
 		[]uint{1}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -32,7 +29,7 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.CryptocurrencyOHLCVLatestByID(
+	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
 		[]uint{1}, nil,
 	)
 
@@ -42,7 +39,7 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 1)
 
-	res, status, _ = c.CryptocurrencyOHLCVLatestByID(
+	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
 		[]uint{10000000000}, nil,
 	)
 
@@ -51,8 +48,7 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 }
 
 func TestClient_CryptocurrencyOHLCVLatestBySymbol(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-	res, status, _ := c.CryptocurrencyOHLCVLatestBySymbol(
+	res, status, _ := cTest.CryptocurrencyOHLCVLatestBySymbol(
 		[]string{"LTC"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -63,7 +59,7 @@ func TestClient_CryptocurrencyOHLCVLatestBySymbol(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.CryptocurrencyOHLCVLatestBySymbol(
+	res, status, _ = cTest.CryptocurrencyOHLCVLatestBySymbol(
 		[]string{"---"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -72,13 +68,11 @@ func TestClient_CryptocurrencyOHLCVLatestBySymbol(t *testing.T) {
 }
 
 func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	timeStart := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 6))
-	timeEnd := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 4))
+	timeStart := time.Now().Add(-time.Hour * 24 * 7 * 6)
+	timeEnd := time.Now().Add(-time.Hour * 24 * 7 * 4)
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
-	res, status, _ := c.CryptocurrencyOHLCVHistoricalByID(
+	res, status, _ := cTest.CryptocurrencyOHLCVHistoricalByID(
 		1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -90,7 +84,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
 	require.EqualValues(t, status.CreditCount, 2)
 
 	perioder = NewPeriod(&timeStart, nil, 5)
-	res, status, _ = c.CryptocurrencyOHLCVHistoricalByID(
+	res, status, _ = cTest.CryptocurrencyOHLCVHistoricalByID(
 		1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -103,13 +97,11 @@ func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
 }
 
 func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	timeStart := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 6))
-	timeEnd := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 2))
+	timeStart := time.Now().Add(-time.Hour * 24 * 7 * 6)
+	timeEnd := time.Now().Add(-time.Hour * 24 * 7 * 2)
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
-	res, status, _ := c.CryptocurrencyOHLCVHistoricalBySymbol(
+	res, status, _ := cTest.CryptocurrencyOHLCVHistoricalBySymbol(
 		"BTC", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -121,7 +113,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
 	require.EqualValues(t, status.CreditCount, 2)
 
 	perioder = NewPeriod(&timeStart, nil, 5)
-	res, status, _ = c.CryptocurrencyOHLCVHistoricalBySymbol(
+	res, status, _ = cTest.CryptocurrencyOHLCVHistoricalBySymbol(
 		"BTC", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 

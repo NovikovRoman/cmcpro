@@ -2,15 +2,12 @@ package cmcpro
 
 import (
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 	"time"
 )
 
 func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.ExchangeQuotesLatestByID(
+	res, status, _ := cTest.ExchangeQuotesLatestByID(
 		[]uint{270}, NewConvertByCodes("RUB", "EUR"), // RUB, EUR
 	)
 
@@ -19,7 +16,7 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.ExchangeQuotesLatestByID(
+	res, status, _ = cTest.ExchangeQuotesLatestByID(
 		[]uint{270}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -30,7 +27,7 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.ExchangeQuotesLatestByID(
+	res, status, _ = cTest.ExchangeQuotesLatestByID(
 		[]uint{270}, nil,
 	)
 
@@ -40,7 +37,7 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 1)
 
-	res, status, _ = c.ExchangeQuotesLatestByID(
+	res, status, _ = cTest.ExchangeQuotesLatestByID(
 		[]uint{1000000000}, nil,
 	)
 
@@ -49,9 +46,7 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 }
 
 func TestClient_ExchangeQuotesLatestBySlug(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	res, status, _ := c.ExchangeQuotesLatestBySlug(
+	res, status, _ := cTest.ExchangeQuotesLatestBySlug(
 		[]string{"bittrex"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -62,7 +57,7 @@ func TestClient_ExchangeQuotesLatestBySlug(t *testing.T) {
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
 
-	res, status, _ = c.ExchangeQuotesLatestBySlug(
+	res, status, _ = cTest.ExchangeQuotesLatestBySlug(
 		[]string{"---"}, nil,
 	)
 
@@ -71,13 +66,11 @@ func TestClient_ExchangeQuotesLatestBySlug(t *testing.T) {
 }
 
 func TestClient_ExchangeQuotesHistoricalByID(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	timeStart := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 6))
-	timeEnd := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 4))
+	timeStart := time.Now().Add(-time.Hour * 24 * 7 * 6)
+	timeEnd := time.Now().Add(-time.Hour * 24 * 7 * 4)
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
-	res, status, _ := c.ExchangeQuotesHistoricalByID(
+	res, status, _ := cTest.ExchangeQuotesHistoricalByID(
 		22, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -89,7 +82,7 @@ func TestClient_ExchangeQuotesHistoricalByID(t *testing.T) {
 	require.EqualValues(t, status.CreditCount, 2)
 
 	perioder = NewPeriod(&timeStart, nil, 5)
-	res, status, _ = c.ExchangeQuotesHistoricalByID(
+	res, status, _ = cTest.ExchangeQuotesHistoricalByID(
 		22, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -102,13 +95,11 @@ func TestClient_ExchangeQuotesHistoricalByID(t *testing.T) {
 }
 
 func TestClient_ExchangeQuotesHistoricalBySymbol(t *testing.T) {
-	c, _ := New(os.Getenv("API-KEY"), false, "", Timeout)
-
-	timeStart := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 6))
-	timeEnd := time.Now().Add(- time.Duration(time.Hour * 24 * 7 * 4))
+	timeStart := time.Now().Add(-time.Hour * 24 * 7 * 6)
+	timeEnd := time.Now().Add(-time.Hour * 24 * 7 * 4)
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
-	res, status, _ := c.ExchangeQuotesHistoricalBySlug(
+	res, status, _ := cTest.ExchangeQuotesHistoricalBySlug(
 		"bittrex", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
@@ -120,7 +111,7 @@ func TestClient_ExchangeQuotesHistoricalBySymbol(t *testing.T) {
 	require.EqualValues(t, status.CreditCount, 2)
 
 	perioder = NewPeriod(&timeStart, nil, 5)
-	res, status, _ = c.ExchangeQuotesHistoricalBySlug(
+	res, status, _ = cTest.ExchangeQuotesHistoricalBySlug(
 		"bittrex", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
