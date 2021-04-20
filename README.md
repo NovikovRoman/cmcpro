@@ -5,6 +5,7 @@ Coinmarketcap Pro API Client written in Golang
 Current version: `v1`
 
 ## Usage
+
 ```go
 package main
 
@@ -19,8 +20,8 @@ import (
 func main() {
 	// true - https://pro-api.coinmarketcap.com/v1, false - https://sandbox-api.coinmarketcap.com/v1
 	proxy := ""
-	client, err := cmc.New(os.Getenv("API-KEY"), false, proxy, time.Duration(time.Second * 15))
-	if err!= nil {
+	client, err := cmc.New(os.Getenv("API-KEY"), false, proxy, time.Duration(time.Second*15))
+	if err != nil {
 		log.Fatalf("create client %s", err.Error())
 	}
 	data, status, err := client.CryptocurrencyListingsLatest(
@@ -38,6 +39,7 @@ func main() {
 See also tests
 
 ## Features
+
 | Type           | Endpoint                               | Done |
 |----------------|----------------------------------------|-------------|
 | Cryptocurrency | /v1/cryptocurrency/info                | ✔ |
@@ -59,6 +61,8 @@ See also tests
 | Global Metrics | /v1/global-metrics/quotes/latest       | ✔ |
 | Global Metrics | /v1/global-metrics/quotes/historical   | ✔ |
 | Tools          | /v1/tools/price-conversion             | ✔ |
+| KeyInfo        | /v1/key/info                           | ✔ |
 
 ## Reference
+
 [Coinmarketcap Pro v1](https://pro.coinmarketcap.com/api/v1)
