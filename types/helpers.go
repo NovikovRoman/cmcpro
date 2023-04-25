@@ -1,7 +1,6 @@
 package types
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -14,7 +13,7 @@ func (bit *ConvertibleBoolean) UnmarshalJSON(data []byte) error {
 	} else if asString == "0" || asString == "false" {
 		*bit = false
 	} else {
-		return errors.New(fmt.Sprintf("Boolean unmarshal error: invalid input %s", asString))
+		return fmt.Errorf("Boolean unmarshal error: invalid input %s", asString)
 	}
 	return nil
 }

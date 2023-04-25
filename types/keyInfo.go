@@ -15,7 +15,7 @@ type KeyInfo struct {
 		Minute struct {
 			RequestsMade int `json:"requests_made"`
 			RequestsLeft int `json:"requests_left"`
-		} `json:"minute"`
+		} `json:"current_minute"`
 		CurrentDay struct {
 			CreditsUsed int `json:"credits_used"`
 			CreditsLeft int `json:"credits_left"`
