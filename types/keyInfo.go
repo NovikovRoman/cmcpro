@@ -2,9 +2,6 @@ package types
 
 type KeyInfo struct {
 	Plan struct {
-		CreditLimitDaily                 int    `json:"credit_limit_daily"`
-		CreditLimitDailyReset            string `json:"credit_limit_daily_reset"`
-		CreditLimitDailyResetTimestamp   string `json:"credit_limit_daily_reset_timestamp"`
 		CreditLimitMonthly               int    `json:"credit_limit_monthly"`
 		CreditLimitMonthlyReset          string `json:"credit_limit_monthly_reset"`
 		CreditLimitMonthlyResetTimestamp string `json:"credit_limit_monthly_reset_timestamp"`
