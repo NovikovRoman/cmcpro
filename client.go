@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -68,7 +67,7 @@ func (c *Client) do(req *http.Request) ([]byte, error) {
 	}
 
 	defer closer(resp.Body)
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
 
 func createHttpTransport(proxy string) (*http.Transport, error) {

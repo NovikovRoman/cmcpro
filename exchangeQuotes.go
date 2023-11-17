@@ -3,7 +3,6 @@ package cmcpro
 import (
 	"context"
 	"github.com/NovikovRoman/cmcpro/types"
-	"net/http"
 	"strconv"
 	"strings"
 )
@@ -87,7 +86,7 @@ func (c *Client) exchangeQuotesHistorical(ctx context.Context, params map[string
 	return respInfo.Data, &respInfo.Status, nil
 }
 
-func (c *Client) createRequestExchangeQuotes(ctx context.Context, link string, params map[string]string, perioder Perioder, interval string, converter Converter) (*http.Request, error) {
+/* func (c *Client) createRequestExchangeQuotes(ctx context.Context, link string, params map[string]string, perioder Perioder, interval string, converter Converter) (*http.Request, error) {
 
 	req, err := c.createRequest(ctx, link)
 	if err != nil {
@@ -114,4 +113,4 @@ func (c *Client) createRequestExchangeQuotes(ctx context.Context, link string, p
 
 	req.URL.RawQuery = query.Encode()
 	return req, nil
-}
+} */
