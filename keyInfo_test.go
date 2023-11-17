@@ -1,9 +1,10 @@
 package cmcpro
 
 import (
+	"testing"
+
 	"github.com/NovikovRoman/cmcpro/types"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestClient_KeyInfo(t *testing.T) {

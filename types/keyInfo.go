@@ -1,11 +1,13 @@
 package types
 
+import "time"
+
 type KeyInfo struct {
 	Plan struct {
-		CreditLimitMonthly               int    `json:"credit_limit_monthly"`
-		CreditLimitMonthlyReset          string `json:"credit_limit_monthly_reset"`
-		CreditLimitMonthlyResetTimestamp string `json:"credit_limit_monthly_reset_timestamp"`
-		RateLimitMinute                  int    `json:"rate_limit_minute"`
+		CreditLimitMonthly               int       `json:"credit_limit_monthly"`
+		CreditLimitMonthlyReset          string    `json:"credit_limit_monthly_reset"`
+		CreditLimitMonthlyResetTimestamp time.Time `json:"credit_limit_monthly_reset_timestamp"`
+		RateLimitMinute                  int       `json:"rate_limit_minute"`
 	} `json:"plan"`
 
 	Usage struct {
