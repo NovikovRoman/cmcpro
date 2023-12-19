@@ -8,11 +8,12 @@ import (
 
 func TestClient_ExchangeMarketPair(t *testing.T) {
 	res, status, _ := cTest.ExchangeMarketPairByID(
-		contextTest, 22, 1, 5, NewConvertByCodes("RUB"),
+		contextTest, 270, 1, 5, NewConvertByCodes("RUB"),
 	)
 
-	assert.Equal(t, res.Name, "Bittrex Global")
-	assert.Equal(t, res.Slug, "bittrex")
+	assert.Equal(t, res.Name, "Binance")
+	assert.Equal(t, res.Slug, "binance")
+	assert.True(t, len(res.MarketPairs) > 0)
 	assert.Equal(t, status.ErrorCode, 0)
 	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
@@ -20,11 +21,12 @@ func TestClient_ExchangeMarketPair(t *testing.T) {
 	}
 
 	res, status, _ = cTest.ExchangeMarketPairBySlug(
-		contextTest, "bittrex", 1, 5, NewConvertByCodes("RUB"),
+		contextTest, "binance", 1, 5, NewConvertByCodes("RUB"),
 	)
 
-	assert.Equal(t, res.Name, "Bittrex Global")
-	assert.Equal(t, res.Slug, "bittrex")
+	assert.Equal(t, res.Name, "Binance")
+	assert.Equal(t, res.Slug, "binance")
+	assert.True(t, len(res.MarketPairs) > 0)
 	assert.Equal(t, status.ErrorCode, 0)
 	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {

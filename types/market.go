@@ -7,6 +7,7 @@ type MarketPair struct {
 	MarketPair      string                `json:"market_pair,omitempty"`
 	MarketPairBase  *PairInfo             `json:"market_pair_base,omitempty"`
 	MarketPairQuote *PairInfo             `json:"market_pair_quote,omitempty"`
+	Category        string                `json:"category,omitempty"`
 	Quote           map[string]*QuotePair `json:"quote,omitempty"`
 }
 
