@@ -4,13 +4,13 @@ import "time"
 
 type CryptocurrencyHistorical struct {
 	BasicCoin
-	CmcRank           int                             `json:"cmc_rank"`
-	NumMarketPairs    uint                            `json:"num_market_pairs"`
-	CirculatingSupply float64                         `json:"circulating_supply,omitempty"`
-	TotalSupply       float64                         `json:"total_supply,omitempty"`
-	MaxSupply         float64                         `json:"max_supply,omitempty"`
-	LastUpdated       time.Time                       `json:"last_updated,omitempty"`
-	Quote             map[string]*CryptocurrencyQuote `json:"quote,omitempty"`
+	CmcRank           int                            `json:"cmc_rank"`
+	NumMarketPairs    uint                           `json:"num_market_pairs"`
+	CirculatingSupply float64                        `json:"circulating_supply,omitempty"`
+	TotalSupply       float64                        `json:"total_supply,omitempty"`
+	MaxSupply         float64                        `json:"max_supply,omitempty"`
+	LastUpdated       time.Time                      `json:"last_updated,omitempty"`
+	Quote             map[string]CryptocurrencyQuote `json:"quote,omitempty"`
 }
 
 type CryptocurrencyLatest struct {

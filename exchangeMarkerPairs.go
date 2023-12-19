@@ -26,7 +26,7 @@ func (c *Client) ExchangeMarketPairBySlug(ctx context.Context, slug string, star
 
 func (c *Client) exchangeMarketPair(ctx context.Context, params map[string]string, start uint, limit uint, converter Converter) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
 
-	req, err := c.createRequest(ctx, "/exchange/market-pairs/latest")
+	req, err := c.createRequest(ctx, "/v1/exchange/market-pairs/latest")
 	if err != nil {
 		return nil, nil, err
 	}

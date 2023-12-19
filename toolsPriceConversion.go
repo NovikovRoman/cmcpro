@@ -3,34 +3,48 @@ package cmcpro
 import (
 	"context"
 	"fmt"
-	"github.com/NovikovRoman/cmcpro/types"
 	"strconv"
 	"time"
+
+	"github.com/NovikovRoman/cmcpro/types"
 )
 
-func (c *Client) ToolsPriceConversionByID(ctx context.Context, amount float64, id uint, converter Converter, t *time.Time) (*types.PriceConversion, *types.Status, error) {
+func (c *Client) ToolsPriceConversionByID(ctx context.Context, amount float64, id uint, converter Converter, t *time.Time) (data types.PriceConversion, status types.Status, err error) {
 
 	params := map[string]string{
 		"id": strconv.FormatUint(uint64(id), 10),
 	}
-
-	return c.toolsPriceConversion(ctx, params, amount, converter, t)
+	res := struct {
+		Data   types.PriceConversion `json:"data"`
+		Status types.Status
+	}{}
+	if err = c.toolsPriceConversion(ctx, params, amount, converter, t, &res); err != nil {
+		return
+	}
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) ToolsPriceConversionBySymbol(ctx context.Context, amount float64, symbol string, converter Converter, t *time.Time) (*types.PriceConversion, *types.Status, error) {
+func (c *Client) ToolsPriceConversionBySymbol(ctx context.Context, amount float64, symbol string, converter Converter, t *time.Time) (data []types.PriceConversion, status types.Status, err error) {
 
 	params := map[string]string{
 		"symbol": symbol,
 	}
 
-	return c.toolsPriceConversion(ctx, params, amount, converter, t)
+	res := struct {
+		Data   []types.PriceConversion `json:"data"`
+		Status types.Status
+	}{}
+	if err = c.toolsPriceConversion(ctx, params, amount, converter, t, &res); err != nil {
+		return
+	}
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) toolsPriceConversion(ctx context.Context, params map[string]string, amount float64, converter Converter, t *time.Time) (*types.PriceConversion, *types.Status, error) {
+func (c *Client) toolsPriceConversion(ctx context.Context, params map[string]string, amount float64, converter Converter, t *time.Time, res interface{}) (err error) {
 
-	req, err := c.createRequest(ctx, "/tools/price-conversion")
+	req, err := c.createRequest(ctx, "/v2/tools/price-conversion")
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
 	query := req.URL.Query()
@@ -50,15 +64,5 @@ func (c *Client) toolsPriceConversion(ctx context.Context, params map[string]str
 	}
 
 	req.URL.RawQuery = query.Encode()
-
-	respInfo := struct {
-		Data   *types.PriceConversion `json:"data"`
-		Status types.Status
-	}{}
-
-	if err = c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
-	}
-
-	return respInfo.Data, &respInfo.Status, nil
+	return c.exec(req, &res)
 }

@@ -40,14 +40,11 @@ func (c *Client) exec(req *http.Request, obj interface{}) error {
 		return err
 	}
 
-	if err := json.Unmarshal(b, &obj); err != nil {
-		return err
-	}
-	return nil
+	return json.Unmarshal(b, &obj)
 }
 
 func (c *Client) createRequest(ctx context.Context, link string) (*http.Request, error) {
-	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s%s", c.ApiPoint, link), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("%s%s", c.ApiPoint, link), nil)
 	if err != nil {
 		return nil, err
 	}

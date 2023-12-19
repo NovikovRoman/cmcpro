@@ -2,46 +2,45 @@ package cmcpro
 
 import (
 	"context"
-	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
+
+	"github.com/NovikovRoman/cmcpro/types"
 )
 
-func (c *Client) GlobalMetricsQuotesLatest(ctx context.Context, converter Converter) (*types.GlobalMetricsQuotesLatest, *types.Status, error) {
+func (c *Client) GlobalMetricsQuotesLatest(ctx context.Context, converter Converter) (data types.GlobalMetricsQuotesLatest, status types.Status, err error) {
 
-	req, err := c.createGlobalMetricsQuotesRequest(ctx, "/global-metrics/quotes/latest", nil, converter)
+	req, err := c.createGlobalMetricsQuotesRequest(ctx, "/v1/global-metrics/quotes/latest", nil, converter)
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
-	respInfo := struct {
+	res := struct {
 		Data   types.GlobalMetricsQuotesLatest `json:"data"`
 		Status types.Status
 	}{}
 
-	if err = c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.exec(req, &res); err != nil {
+		return
 	}
-
-	return &respInfo.Data, &respInfo.Status, nil
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) GlobalMetricsQuotesHistorical(ctx context.Context, perioder Perioder, converter Converter) (*types.GlobalMetricsQuotesHistorical, *types.Status, error) {
+func (c *Client) GlobalMetricsQuotesHistorical(ctx context.Context, perioder Perioder, converter Converter) (data types.GlobalMetricsQuotesHistorical, status types.Status, err error) {
 
-	req, err := c.createGlobalMetricsQuotesRequest(ctx, "/global-metrics/quotes/historical", perioder, converter)
+	req, err := c.createGlobalMetricsQuotesRequest(ctx, "/v1/global-metrics/quotes/historical", perioder, converter)
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
-	respInfo := struct {
+	res := struct {
 		Data   types.GlobalMetricsQuotesHistorical `json:"data"`
 		Status types.Status
 	}{}
 
-	if err = c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.exec(req, &res); err != nil {
+		return
 	}
-
-	return &respInfo.Data, &respInfo.Status, nil
+	return res.Data, res.Status, nil
 }
 
 func (c *Client) createGlobalMetricsQuotesRequest(ctx context.Context, link string, perioder Perioder, converter Converter) (*http.Request, error) {
@@ -61,6 +60,5 @@ func (c *Client) createGlobalMetricsQuotesRequest(ctx context.Context, link stri
 	}
 
 	req.URL.RawQuery = query.Encode()
-
 	return req, nil
 }

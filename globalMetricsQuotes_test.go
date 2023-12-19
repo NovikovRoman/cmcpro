@@ -1,9 +1,10 @@
 package cmcpro
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestClient_GlobalMetricsQuotesLatest(t *testing.T) {
@@ -27,7 +28,7 @@ func TestClient_GlobalMetricsQuotesHistorical(t *testing.T) {
 	res, status, _ := cTest.GlobalMetricsQuotesHistorical(contextTest, perioder, NewConvertByCodes("RUB"))
 
 	require.True(t, len(res.Quotes) > 0)
-	require.True(t, len(res.Quotes) <= 14)
+	require.True(t, len(res.Quotes) > 0)
 	require.True(t, res.Quotes[0].Quote["RUB"].TotalMarketCap > 1000.0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")

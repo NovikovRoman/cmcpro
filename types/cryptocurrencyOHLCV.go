@@ -3,16 +3,16 @@ package types
 import "time"
 
 type CryptocurrencyOHLCVHistorical struct {
-	ID     uint                         `json:"id"`
-	Name   string                       `json:"name"`
-	Symbol string                       `json:"symbol"`
-	Quotes []*CryptocurrencyOHLCVQuotes `json:"quotes"`
+	ID     uint                        `json:"id"`
+	Name   string                      `json:"name"`
+	Symbol string                      `json:"symbol"`
+	Quotes []CryptocurrencyOHLCVQuotes `json:"quotes"`
 }
 
 type CryptocurrencyOHLCVQuotes struct {
-	TimeOpen  time.Time                            `json:"time_open,omitempty"`
-	TimeClose time.Time                            `json:"time_close,omitempty"`
-	Quote     map[string]*CryptocurrencyOHLCVQuote `json:"quote,omitempty"`
+	TimeOpen  time.Time                           `json:"time_open,omitempty"`
+	TimeClose time.Time                           `json:"time_close,omitempty"`
+	Quote     map[string]CryptocurrencyOHLCVQuote `json:"quote,omitempty"`
 }
 
 type CryptocurrencyOHLCVQuote struct {
@@ -31,10 +31,10 @@ type OHLCV struct {
 
 type CryptocurrencyOHLCVLatest struct {
 	CryptocurrencyOHLCVHistorical
-	LastUpdated time.Time                                  `json:"last_updated,omitempty"`
-	TimeOpen    time.Time                                  `json:"time_open,omitempty"`
-	TimeClose   time.Time                                  `json:"time_close,omitempty"`
-	Quote       map[string]*CryptocurrencyOHLCVQuoteLatest `json:"quote,omitempty"`
+	LastUpdated time.Time                                 `json:"last_updated,omitempty"`
+	TimeOpen    time.Time                                 `json:"time_open,omitempty"`
+	TimeClose   time.Time                                 `json:"time_close,omitempty"`
+	Quote       map[string]CryptocurrencyOHLCVQuoteLatest `json:"quote,omitempty"`
 }
 
 type CryptocurrencyOHLCVQuoteLatest struct {

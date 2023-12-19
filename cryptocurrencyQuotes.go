@@ -2,13 +2,14 @@ package cmcpro
 
 import (
 	"context"
-	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/NovikovRoman/cmcpro/types"
 )
 
-func (c *Client) CryptocurrencyQuotesLatestByID(ctx context.Context, id []uint, converter Converter) (map[string]*types.CryptocurrencyMarketQuotesLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyQuotesLatestByID(ctx context.Context, id []uint, converter Converter) (data map[string]types.CryptocurrencyMarketQuotesLatest, status types.Status, err error) {
 
 	ids := make([]string, len(id))
 	for k, v := range id {
@@ -18,84 +19,93 @@ func (c *Client) CryptocurrencyQuotesLatestByID(ctx context.Context, id []uint, 
 	params := map[string]string{
 		"id": strings.Join(ids, ","),
 	}
-
-	return c.cryptocurrencyQuotesLatest(ctx, params, converter)
+	res := struct {
+		Data   map[string]types.CryptocurrencyMarketQuotesLatest `json:"data"`
+		Status types.Status
+	}{}
+	if err = c.cryptocurrencyQuotesLatest(ctx, params, converter, &res); err != nil {
+		return
+	}
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) CryptocurrencyQuotesLatestBySlug(ctx context.Context, slug []string, converter Converter) (map[string]*types.CryptocurrencyMarketQuotesLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyQuotesLatestBySlug(ctx context.Context, slug []string, converter Converter) (data map[string]types.CryptocurrencyMarketQuotesLatest, status types.Status, err error) {
 
 	params := map[string]string{
 		"slug": strings.Join(slug, ","),
 	}
-
-	return c.cryptocurrencyQuotesLatest(ctx, params, converter)
+	res := struct {
+		Data   map[string]types.CryptocurrencyMarketQuotesLatest `json:"data"`
+		Status types.Status
+	}{}
+	if err = c.cryptocurrencyQuotesLatest(ctx, params, converter, &res); err != nil {
+		return
+	}
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) CryptocurrencyQuotesLatestBySymbol(ctx context.Context, symbol []string, converter Converter) (map[string]*types.CryptocurrencyMarketQuotesLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyQuotesLatestBySymbol(ctx context.Context, symbol []string, converter Converter) (data map[string][]types.CryptocurrencyMarketQuotesLatest, status types.Status, err error) {
 
 	params := map[string]string{
 		"symbol": strings.Join(symbol, ","),
 	}
-
-	return c.cryptocurrencyQuotesLatest(ctx, params, converter)
-}
-
-func (c *Client) cryptocurrencyQuotesLatest(ctx context.Context, params map[string]string, converter Converter) (map[string]*types.CryptocurrencyMarketQuotesLatest, *types.Status, error) {
-
-	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/cryptocurrency/quotes/latest",
-		params, nil, "", converter)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	respInfo := struct {
-		Data   map[string]*types.CryptocurrencyMarketQuotesLatest `json:"data"`
+	res := struct {
+		Data   map[string][]types.CryptocurrencyMarketQuotesLatest `json:"data"`
 		Status types.Status
 	}{}
-
-	if err := c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.cryptocurrencyQuotesLatest(ctx, params, converter, &res); err != nil {
+		return
 	}
-
-	return respInfo.Data, &respInfo.Status, nil
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) CryptocurrencyQuotesHistoricalByID(ctx context.Context, id uint, perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyMarketQuotesHistorical, *types.Status, error) {
+func (c *Client) cryptocurrencyQuotesLatest(ctx context.Context, params map[string]string, converter Converter, res interface{}) (err error) {
+	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/v2/cryptocurrency/quotes/latest",
+		params, nil, "", converter)
+	if err != nil {
+		return
+	}
+	return c.exec(req, &res)
+}
+
+func (c *Client) CryptocurrencyQuotesHistoricalByID(ctx context.Context, id uint, perioder Perioder, interval string, converter Converter) (data map[string]types.CryptocurrencyMarketQuotesHistorical, status types.Status, err error) {
 
 	params := map[string]string{
 		"id": strconv.FormatUint(uint64(id), 10),
 	}
-
-	return c.cryptocurrencyQuotesHistorical(ctx, params, perioder, interval, converter)
+	res := struct {
+		Data   map[string]types.CryptocurrencyMarketQuotesHistorical `json:"data"`
+		Status types.Status
+	}{}
+	if err = c.cryptocurrencyQuotesHistorical(ctx, params, perioder, interval, converter, &res); err != nil {
+		return
+	}
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) CryptocurrencyQuotesHistoricalBySymbol(ctx context.Context, symbol string, perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyMarketQuotesHistorical, *types.Status, error) {
+func (c *Client) CryptocurrencyQuotesHistoricalBySymbol(ctx context.Context, symbol string, perioder Perioder, interval string, converter Converter) (data map[string][]types.CryptocurrencyMarketQuotesHistorical, status types.Status, err error) {
 
 	params := map[string]string{
 		"symbol": symbol,
 	}
-
-	return c.cryptocurrencyQuotesHistorical(ctx, params, perioder, interval, converter)
-}
-
-func (c *Client) cryptocurrencyQuotesHistorical(ctx context.Context, params map[string]string, perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyMarketQuotesHistorical, *types.Status, error) {
-
-	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/cryptocurrency/quotes/historical",
-		params, perioder, interval, converter)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	respInfo := struct {
-		Data   *types.CryptocurrencyMarketQuotesHistorical `json:"data"`
+	res := struct {
+		Data   map[string][]types.CryptocurrencyMarketQuotesHistorical `json:"data"`
 		Status types.Status
 	}{}
-
-	if err := c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.cryptocurrencyQuotesHistorical(ctx, params, perioder, interval, converter, &res); err != nil {
+		return
 	}
+	return res.Data, res.Status, nil
+}
 
-	return respInfo.Data, &respInfo.Status, nil
+func (c *Client) cryptocurrencyQuotesHistorical(ctx context.Context, params map[string]string, perioder Perioder, interval string, converter Converter, res interface{}) (err error) {
+
+	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/v3/cryptocurrency/quotes/historical",
+		params, perioder, interval, converter)
+	if err != nil {
+		return
+	}
+	return c.exec(req, &res)
 }
 
 func (c *Client) createRequestCryptocurrencyQuotes(ctx context.Context, link string, params map[string]string, perioder Perioder, interval string, converter Converter) (*http.Request, error) {

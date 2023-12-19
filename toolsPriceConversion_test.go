@@ -1,8 +1,10 @@
 package cmcpro
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/NovikovRoman/cmcpro/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClient_ToolsPriceConversion(t *testing.T) {
@@ -10,25 +12,26 @@ func TestClient_ToolsPriceConversion(t *testing.T) {
 		contextTest, 10, 1, NewConvertByCodes("RUB"), nil,
 	)
 
-	require.Equal(t, res.Name, "Bitcoin")
-	require.Equal(t, res.Amount, 10.0)
-	require.True(t, res.Quote["RUB"].Price > 0)
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res.Name, "Bitcoin")
+	assert.Equal(t, res.Amount, 10.0)
+	assert.True(t, res.Quote["RUB"].Price > 0)
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 1)
+		assert.EqualValues(t, status.CreditCount, 1)
 	}
 
-	res, status, _ = cTest.ToolsPriceConversionBySymbol(
+	var res2 []types.PriceConversion
+	res2, status, _ = cTest.ToolsPriceConversionBySymbol(
 		contextTest, 10, "BTC", NewConvertByCodes("RUB"), nil,
 	)
 
-	require.Equal(t, res.Name, "Bitcoin")
-	require.Equal(t, res.Amount, 10.0)
-	require.True(t, res.Quote["RUB"].Price > 0)
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res2[0].Name, "Bitcoin")
+	assert.Equal(t, res2[0].Amount, 10.0)
+	assert.True(t, res2[0].Quote["RUB"].Price > 0)
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 1)
+		assert.EqualValues(t, status.CreditCount, 1)
 	}
 }

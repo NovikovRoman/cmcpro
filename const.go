@@ -2,8 +2,8 @@ package cmcpro
 
 import "time"
 
-const ApiPoint = "https://pro-api.coinmarketcap.com/v1"
-const ApiPointTest = "https://sandbox-api.coinmarketcap.com/v1"
+const ApiPoint = "https://pro-api.coinmarketcap.com"
+const ApiPointTest = "https://sandbox-api.coinmarketcap.com"
 
 const All = "all"
 const Coins = "coins"

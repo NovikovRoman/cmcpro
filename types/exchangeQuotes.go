@@ -3,16 +3,16 @@ package types
 import "time"
 
 type ExchangeMarketQuotesHistorical struct {
-	ID     uint              `json:"id"`
-	Name   string            `json:"name"`
-	Slug   string            `json:"slug"`
-	Quotes []*ExchangeQuotes `json:"quotes,omitempty"`
+	ID     uint             `json:"id"`
+	Name   string           `json:"name"`
+	Slug   string           `json:"slug"`
+	Quotes []ExchangeQuotes `json:"quotes,omitempty"`
 }
 
 type ExchangeQuotes struct {
-	Timestamp      time.Time                      `json:"timestamp,omitempty"`
-	Quote          map[string]*ExchangeQuotesItem `json:"quote,omitempty"`
-	NumMarketPairs uint                           `json:"num_market_pairs,omitempty"`
+	Timestamp      time.Time                     `json:"timestamp,omitempty"`
+	Quote          map[string]ExchangeQuotesItem `json:"quote,omitempty"`
+	NumMarketPairs uint                          `json:"num_market_pairs,omitempty"`
 }
 
 type ExchangeQuotesItem struct {
@@ -21,12 +21,12 @@ type ExchangeQuotesItem struct {
 }
 
 type ExchangeMarketQuotesLatest struct {
-	ID             uint                                `json:"id"`
-	Name           string                              `json:"name"`
-	Slug           string                              `json:"slug"`
-	NumMarketPairs uint                                `json:"num_market_pairs,omitempty"`
-	LastUpdated    time.Time                           `json:"last_updated,omitempty"`
-	Quote          map[string]*ExchangeQuoteItemLatest `json:"quote,omitempty"`
+	ID             uint                               `json:"id"`
+	Name           string                             `json:"name"`
+	Slug           string                             `json:"slug"`
+	NumMarketPairs uint                               `json:"num_market_pairs,omitempty"`
+	LastUpdated    time.Time                          `json:"last_updated,omitempty"`
+	Quote          map[string]ExchangeQuoteItemLatest `json:"quote,omitempty"`
 }
 
 type ExchangeQuoteItemLatest struct {

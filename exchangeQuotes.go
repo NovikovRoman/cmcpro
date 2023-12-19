@@ -32,7 +32,7 @@ func (c *Client) ExchangeQuotesLatestBySlug(ctx context.Context, slug []string, 
 
 func (c *Client) exchangeQuotesLatest(ctx context.Context, params map[string]string, converter Converter) (map[string]*types.ExchangeMarketQuotesLatest, *types.Status, error) {
 
-	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/exchange/quotes/latest", params, nil, "", converter)
+	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/v1/exchange/quotes/latest", params, nil, "", converter)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -69,7 +69,7 @@ func (c *Client) ExchangeQuotesHistoricalBySlug(ctx context.Context, slug string
 
 func (c *Client) exchangeQuotesHistorical(ctx context.Context, params map[string]string, perioder Perioder, interval string, converter Converter) (*types.ExchangeMarketQuotesHistorical, *types.Status, error) {
 
-	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/exchange/quotes/historical", params, perioder, interval, converter)
+	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/v1/exchange/quotes/historical", params, perioder, interval, converter)
 	if err != nil {
 		return nil, nil, err
 	}

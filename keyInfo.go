@@ -11,7 +11,7 @@ func (c *Client) KeyInfo(ctx context.Context) (keyInfo *types.KeyInfo, status *t
 		req *http.Request
 	)
 
-	if req, err = c.createRequest(ctx, "/key/info"); err != nil {
+	if req, err = c.createRequest(ctx, "/v1/key/info"); err != nil {
 		return
 	}
 

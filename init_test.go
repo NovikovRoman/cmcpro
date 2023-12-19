@@ -13,9 +13,7 @@ var (
 )
 
 func init() {
-	var (
-		err error
-	)
+	var err error
 	prodTest = os.Getenv("PRODUCTION") != ""
 	if cTest, err = New(os.Getenv("API-KEY"), prodTest, "", Timeout); err != nil {
 		log.Fatalln(err)

@@ -2,62 +2,67 @@ package cmcpro
 
 import (
 	"context"
-	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/NovikovRoman/cmcpro/types"
 )
 
 func (c *Client) CryptocurrencyListingsLatest(ctx context.Context, start uint, limit uint, sort string, sortDir string,
 	converter Converter, cryptocurrencyType string,
-) ([]*types.CryptocurrencyLatest, *types.Status, error) {
-
-	req, err := c.createCryptocurrencyListingsRequest(ctx, "/cryptocurrency/listings/latest",
+) (data []types.CryptocurrencyLatest, status types.Status, err error) {
+	var req *http.Request
+	req, err = c.createCryptocurrencyListingsRequest(ctx, "/v1/cryptocurrency/listings/latest",
 		map[string]string{}, start, limit, sort, sortDir, converter, cryptocurrencyType,
 	)
 
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
-	respInfo := struct {
-		Data   []*types.CryptocurrencyLatest `json:"data"`
+	res := struct {
+		Data   []types.CryptocurrencyLatest `json:"data"`
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.exec(req, &res); err != nil {
+		return
 	}
 
-	return respInfo.Data, &respInfo.Status, nil
+	data = res.Data
+	status = res.Status
+	return
 }
 
 func (c *Client) CryptocurrencyListingsHistorical(ctx context.Context, date time.Time,
 	start uint, limit uint, sort string, sortDir string, converter Converter, cryptocurrencyType string,
-) ([]*types.CryptocurrencyHistorical, *types.Status, error) {
+) (data []types.CryptocurrencyHistorical, status types.Status, err error) {
 
 	params := map[string]string{
 		"date": date.Format(time.RFC3339),
 	}
-
-	req, err := c.createCryptocurrencyListingsRequest(ctx, "/cryptocurrency/listings/historical",
+	var req *http.Request
+	req, err = c.createCryptocurrencyListingsRequest(ctx, "/v1/cryptocurrency/listings/historical",
 		params, start, limit, sort, sortDir, converter, cryptocurrencyType,
 	)
 
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
-	respInfo := struct {
-		Data   []*types.CryptocurrencyHistorical `json:"data"`
+	res := struct {
+		Data   []types.CryptocurrencyHistorical `json:"data"`
 		Status types.Status
 	}{}
 
-	if err = c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.exec(req, &res); err != nil {
+		return
 	}
 
-	return respInfo.Data, &respInfo.Status, nil
+	data = res.Data
+	status = res.Status
+	return
 }
 
 func (c *Client) createCryptocurrencyListingsRequest(ctx context.Context, link string,
@@ -108,6 +113,5 @@ func (c *Client) createCryptocurrencyListingsRequest(ctx context.Context, link s
 	}
 
 	req.URL.RawQuery = query.Encode()
-
 	return req, nil
 }

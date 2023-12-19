@@ -1,8 +1,10 @@
 package cmcpro
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/NovikovRoman/cmcpro/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestClient_CryptocurrencyInfo(t *testing.T) {
@@ -18,7 +20,6 @@ func TestClient_CryptocurrencyInfo(t *testing.T) {
 	}
 
 	res, status, _ = cTest.CryptocurrencyInfoBySlug(contextTest, []string{"bitcoin", "litecoin"})
-
 	require.Len(t, res, 2)
 	require.NotNil(t, res["1"])
 	require.NotNil(t, res["2"])
@@ -28,11 +29,12 @@ func TestClient_CryptocurrencyInfo(t *testing.T) {
 		require.EqualValues(t, status.CreditCount, 1)
 	}
 
-	res, status, _ = cTest.CryptocurrencyInfoBySymbol(contextTest, []string{"BTC", "LTC"})
+	var res2 map[string][]types.CryptocurrencyInfo
+	res2, status, _ = cTest.CryptocurrencyInfoBySymbol(contextTest, []string{"BTC", "LTC"})
 
-	require.Len(t, res, 2)
-	require.NotNil(t, res["BTC"])
-	require.NotNil(t, res["LTC"])
+	require.Len(t, res2, 2)
+	require.Greater(t, len(res2["BTC"]), 0)
+	require.NotNil(t, len(res2["LTC"]), 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {

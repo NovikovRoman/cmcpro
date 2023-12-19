@@ -4,10 +4,10 @@ import "time"
 
 type ExchangeHistorical struct {
 	BasicExchange
-	CmcRank        int                                 `json:"cmc_rank"`
-	NumMarketPairs uint                                `json:"num_market_pairs"`
-	Timestamp      time.Time                           `json:"timestamp,omitempty"`
-	Quote          map[string]*ExchangeQuoteHistorical `json:"quote,omitempty"`
+	CmcRank        int                                `json:"cmc_rank"`
+	NumMarketPairs uint                               `json:"num_market_pairs"`
+	Timestamp      time.Time                          `json:"timestamp,omitempty"`
+	Quote          map[string]ExchangeQuoteHistorical `json:"quote,omitempty"`
 }
 
 type ExchangeQuoteHistorical struct {
@@ -17,9 +17,10 @@ type ExchangeQuoteHistorical struct {
 
 type ExchangeLatest struct {
 	BasicExchange
-	NumMarketPairs uint                            `json:"num_market_pairs"`
-	LastUpdated    time.Time                       `json:"last_updated,omitempty"`
-	Quote          map[string]*ExchangeQuoteLatest `json:"quote,omitempty"`
+	// -1 unknown
+	NumMarketPairs int                            `json:"num_market_pairs"`
+	LastUpdated    time.Time                      `json:"last_updated,omitempty"`
+	Quote          map[string]ExchangeQuoteLatest `json:"quote,omitempty"`
 }
 
 type ExchangeQuoteLatest struct {

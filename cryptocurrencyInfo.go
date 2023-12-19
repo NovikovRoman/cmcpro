@@ -2,12 +2,13 @@ package cmcpro
 
 import (
 	"context"
-	"github.com/NovikovRoman/cmcpro/types"
 	"strconv"
 	"strings"
+
+	"github.com/NovikovRoman/cmcpro/types"
 )
 
-func (c *Client) CryptocurrencyInfoByID(ctx context.Context, id []uint) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
+func (c *Client) CryptocurrencyInfoByID(ctx context.Context, id []uint) (info map[string]types.CryptocurrencyInfo, status types.Status, err error) {
 	ids := make([]string, len(id))
 
 	for k, v := range id {
@@ -18,47 +19,65 @@ func (c *Client) CryptocurrencyInfoByID(ctx context.Context, id []uint) (map[str
 		"id": strings.Join(ids, ","),
 	}
 
-	return c.cryptocurrencyInfo(ctx, params)
+	res := struct {
+		Data   map[string]types.CryptocurrencyInfo `json:"data"`
+		Status types.Status
+	}{}
+
+	if err = c.cryptocurrencyInfo(ctx, params, &res); err != nil {
+		return
+	}
+	info = res.Data
+	status = res.Status
+	return
 }
 
-func (c *Client) CryptocurrencyInfoBySlug(ctx context.Context, slug []string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
+func (c *Client) CryptocurrencyInfoBySlug(ctx context.Context, slug []string) (info map[string]types.CryptocurrencyInfo, status types.Status, err error) {
 	params := map[string]string{
 		"slug": strings.Join(slug, ","),
 	}
 
-	return c.cryptocurrencyInfo(ctx, params)
+	res := struct {
+		Data   map[string]types.CryptocurrencyInfo `json:"data"`
+		Status types.Status
+	}{}
+
+	if err = c.cryptocurrencyInfo(ctx, params, &res); err != nil {
+		return
+	}
+	info = res.Data
+	status = res.Status
+	return
 }
 
-func (c *Client) CryptocurrencyInfoBySymbol(ctx context.Context, symbol []string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
+func (c *Client) CryptocurrencyInfoBySymbol(ctx context.Context, symbol []string) (info map[string][]types.CryptocurrencyInfo, status types.Status, err error) {
 	params := map[string]string{
 		"symbol": strings.Join(symbol, ","),
 	}
 
-	return c.cryptocurrencyInfo(ctx, params)
-}
-
-func (c *Client) cryptocurrencyInfo(ctx context.Context, params map[string]string) (map[string]*types.CryptocurrencyInfo, *types.Status, error) {
-	req, err := c.createRequest(ctx, "/cryptocurrency/info")
-	if err != nil {
-		return nil, nil, err
-	}
-
-	query := req.URL.Query()
-
-	for n, v := range params {
-		query.Add(n, v)
-	}
-
-	req.URL.RawQuery = query.Encode()
-
-	respInfo := struct {
-		Data   map[string]*types.CryptocurrencyInfo `json:"data"`
+	res := struct {
+		Data   map[string][]types.CryptocurrencyInfo `json:"data"`
 		Status types.Status
 	}{}
 
-	if err := c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.cryptocurrencyInfo(ctx, params, &res); err != nil {
+		return
+	}
+	info = res.Data
+	status = res.Status
+	return
+}
+
+func (c *Client) cryptocurrencyInfo(ctx context.Context, params map[string]string, res interface{}) (err error) {
+	req, err := c.createRequest(ctx, "/v2/cryptocurrency/info")
+	if err != nil {
+		return
 	}
 
-	return respInfo.Data, &respInfo.Status, nil
+	query := req.URL.Query()
+	for n, v := range params {
+		query.Add(n, v)
+	}
+	req.URL.RawQuery = query.Encode()
+	return c.exec(req, &res)
 }

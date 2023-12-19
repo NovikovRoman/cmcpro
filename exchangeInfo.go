@@ -29,7 +29,7 @@ func (c *Client) ExchangeInfoBySlug(ctx context.Context, slug []string) (map[str
 }
 
 func (c *Client) exchangeInfo(ctx context.Context, params map[string]string) (map[string]*types.ExchangeInfo, *types.Status, error) {
-	req, err := c.createRequest(ctx, "/exchange/info")
+	req, err := c.createRequest(ctx, "/v1/exchange/info")
 	if err != nil {
 		return nil, nil, err
 	}

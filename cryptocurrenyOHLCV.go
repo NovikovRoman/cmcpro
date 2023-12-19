@@ -2,13 +2,14 @@ package cmcpro
 
 import (
 	"context"
-	"github.com/NovikovRoman/cmcpro/types"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/NovikovRoman/cmcpro/types"
 )
 
-func (c *Client) CryptocurrencyOHLCVLatestByID(ctx context.Context, id []uint, converter Converter) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyOHLCVLatestByID(ctx context.Context, id []uint, converter Converter) (data map[string]types.CryptocurrencyOHLCVLatest, status types.Status, err error) {
 
 	ids := make([]string, len(id))
 	for k, v := range id {
@@ -18,75 +19,79 @@ func (c *Client) CryptocurrencyOHLCVLatestByID(ctx context.Context, id []uint, c
 	params := map[string]string{
 		"id": strings.Join(ids, ","),
 	}
-
-	return c.cryptocurrencyOHLCVLatest(ctx, params, converter)
+	res := struct {
+		Data   map[string]types.CryptocurrencyOHLCVLatest `json:"data"`
+		Status types.Status
+	}{}
+	if err = c.cryptocurrencyOHLCVLatest(ctx, params, converter, &res); err != nil {
+		return
+	}
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) CryptocurrencyOHLCVLatestBySymbol(ctx context.Context, symbol []string, converter Converter) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
+func (c *Client) CryptocurrencyOHLCVLatestBySymbol(ctx context.Context, symbol []string, converter Converter) (data map[string][]types.CryptocurrencyOHLCVLatest, status types.Status, err error) {
 
 	params := map[string]string{
 		"symbol": strings.Join(symbol, ","),
 	}
-
-	return c.cryptocurrencyOHLCVLatest(ctx, params, converter)
-}
-
-func (c *Client) cryptocurrencyOHLCVLatest(ctx context.Context, params map[string]string, converter Converter) (map[string]*types.CryptocurrencyOHLCVLatest, *types.Status, error) {
-
-	req, err := c.createCryptocurrencyOHLCVRequest(ctx, "/cryptocurrency/ohlcv/latest", params, nil, "", converter)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	respInfo := struct {
-		Data   map[string]*types.CryptocurrencyOHLCVLatest `json:"data"`
+	res := struct {
+		Data   map[string][]types.CryptocurrencyOHLCVLatest `json:"data"`
 		Status types.Status
 	}{}
-
-	if err := c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.cryptocurrencyOHLCVLatest(ctx, params, converter, &res); err != nil {
+		return
 	}
-
-	return respInfo.Data, &respInfo.Status, nil
+	return res.Data, res.Status, nil
 }
 
-func (c *Client) CryptocurrencyOHLCVHistoricalByID(ctx context.Context, id uint, perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
+func (c *Client) cryptocurrencyOHLCVLatest(ctx context.Context, params map[string]string, converter Converter, res interface{}) (err error) {
+
+	req, err := c.createCryptocurrencyOHLCVRequest(ctx, "/v2/cryptocurrency/ohlcv/latest", params, nil, "", converter)
+	if err != nil {
+		return
+	}
+	return c.exec(req, &res)
+}
+
+func (c *Client) CryptocurrencyOHLCVHistoricalByID(ctx context.Context, id uint, perioder Perioder, interval string, converter Converter) (data types.CryptocurrencyOHLCVHistorical, status types.Status, err error) {
 
 	params := map[string]string{
 		"id": strconv.FormatUint(uint64(id), 10),
 	}
-
-	return c.cryptocurrencyOHLCVHistorical(ctx, params, perioder, interval, converter)
+	res := struct {
+		Data   types.CryptocurrencyOHLCVHistorical `json:"data"`
+		Status types.Status
+	}{}
+	if err = c.cryptocurrencyOHLCVHistorical(ctx, params, perioder, interval, converter, &res); err != nil {
+		return
+	}
+	return res.Data, res.Status, nil
 }
 
 func (c *Client) CryptocurrencyOHLCVHistoricalBySymbol(ctx context.Context, symbol string,
-	perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
+	perioder Perioder, interval string, converter Converter) (data map[string][]types.CryptocurrencyOHLCVHistorical, status types.Status, err error) {
 
 	params := map[string]string{
 		"symbol": symbol,
 	}
-
-	return c.cryptocurrencyOHLCVHistorical(ctx, params, perioder, interval, converter)
-}
-
-func (c *Client) cryptocurrencyOHLCVHistorical(ctx context.Context, params map[string]string, perioder Perioder, interval string, converter Converter) (*types.CryptocurrencyOHLCVHistorical, *types.Status, error) {
-
-	req, err := c.createCryptocurrencyOHLCVRequest(ctx,
-		"/cryptocurrency/ohlcv/historical", params, perioder, interval, converter)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	respInfo := struct {
-		Data   *types.CryptocurrencyOHLCVHistorical `json:"data"`
+	res := struct {
+		Data   map[string][]types.CryptocurrencyOHLCVHistorical `json:"data"`
 		Status types.Status
 	}{}
-
-	if err := c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+	if err = c.cryptocurrencyOHLCVHistorical(ctx, params, perioder, interval, converter, &res); err != nil {
+		return
 	}
+	return res.Data, res.Status, nil
+}
 
-	return respInfo.Data, &respInfo.Status, nil
+func (c *Client) cryptocurrencyOHLCVHistorical(ctx context.Context, params map[string]string, perioder Perioder, interval string, converter Converter, res interface{}) (err error) {
+
+	req, err := c.createCryptocurrencyOHLCVRequest(ctx,
+		"/v2/cryptocurrency/ohlcv/historical", params, perioder, interval, converter)
+	if err != nil {
+		return
+	}
+	return c.exec(req, &res)
 }
 
 func (c *Client) createCryptocurrencyOHLCVRequest(ctx context.Context, link string, params map[string]string, perioder Perioder, interval string, converter Converter) (*http.Request, error) {

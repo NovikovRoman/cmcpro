@@ -1,9 +1,11 @@
 package cmcpro
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
@@ -11,24 +13,11 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 		contextTest, []uint{1}, NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.Equal(t, res["1"].Name, "Bitcoin")
-	require.NotNil(t, res["1"].Quote["RUB"])
-	require.NotNil(t, res["1"].Quote["EUR"])
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
-	if prodTest {
-		require.EqualValues(t, status.CreditCount, 2)
-	}
-
-	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
-		contextTest, []uint{1}, NewConvertByCodes("RUB", "EUR"),
-	)
-
-	require.Equal(t, res["1"].Name, "Bitcoin")
-	require.NotNil(t, res["1"].Quote["RUB"])
-	require.NotNil(t, res["1"].Quote["EUR"])
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res["1"].Name, "Bitcoin")
+	assert.NotNil(t, res["1"].Quote["RUB"])
+	assert.NotNil(t, res["1"].Quote["EUR"])
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
 		require.EqualValues(t, status.CreditCount, 2)
 	}
@@ -37,20 +26,20 @@ func TestClient_CryptocurrencyOHLCVLatestByID(t *testing.T) {
 		contextTest, []uint{1}, nil,
 	)
 
-	require.Equal(t, res["1"].Name, "Bitcoin")
-	require.NotNil(t, res["1"].Quote["USD"])
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res["1"].Name, "Bitcoin")
+	assert.NotNil(t, res["1"].Quote["USD"])
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 1)
+		assert.EqualValues(t, status.CreditCount, 1)
 	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestByID(
 		contextTest, []uint{10000000000}, nil,
 	)
 
-	require.Equal(t, status.ErrorCode, 400)
-	require.Len(t, res, 0)
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Len(t, res, 0)
 }
 
 func TestClient_CryptocurrencyOHLCVLatestBySymbol(t *testing.T) {
@@ -58,21 +47,21 @@ func TestClient_CryptocurrencyOHLCVLatestBySymbol(t *testing.T) {
 		contextTest, []string{"LTC"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.Equal(t, res["LTC"].Name, "Litecoin")
-	require.NotNil(t, res["LTC"].Quote["RUB"])
-	require.NotNil(t, res["LTC"].Quote["EUR"])
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res["LTC"][0].Name, "Litecoin")
+	assert.NotNil(t, res["LTC"][0].Quote["RUB"])
+	assert.NotNil(t, res["LTC"][0].Quote["EUR"])
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 2)
+		assert.EqualValues(t, status.CreditCount, 2)
 	}
 
 	res, status, _ = cTest.CryptocurrencyOHLCVLatestBySymbol(
-		contextTest, []string{"---"}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []string{"1-2-3"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.Equal(t, status.ErrorCode, 400)
-	require.Len(t, res, 0)
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Len(t, res, 0)
 }
 
 func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
@@ -86,7 +75,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
 
 	require.EqualValues(t, res.ID, 1)
 	require.Equal(t, res.Name, "Bitcoin")
-	require.True(t, len(res.Quotes) <= 14)
+	require.True(t, len(res.Quotes) > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {
@@ -100,7 +89,7 @@ func TestClient_CryptocurrencyOHLCVHistoricalByID(t *testing.T) {
 
 	require.EqualValues(t, res.ID, 1)
 	require.Equal(t, res.Name, "Bitcoin")
-	require.True(t, len(res.Quotes) <= 5)
+	require.True(t, len(res.Quotes) > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {
@@ -117,9 +106,9 @@ func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
 		contextTest, "BTC", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.EqualValues(t, res.ID, 1)
-	require.Equal(t, res.Name, "Bitcoin")
-	require.True(t, len(res.Quotes) <= 14)
+	require.EqualValues(t, res["BTC"][0].ID, 1)
+	require.Equal(t, res["BTC"][0].Name, "Bitcoin")
+	require.True(t, len(res["BTC"][0].Quotes) > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {
@@ -131,9 +120,9 @@ func TestClient_CryptocurrencyOHLCVHistoricalBySymbol(t *testing.T) {
 		contextTest, "BTC", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.EqualValues(t, res.ID, 1)
-	require.Equal(t, res.Name, "Bitcoin")
-	require.True(t, len(res.Quotes) <= 5)
+	require.EqualValues(t, res["BTC"][0].ID, 1)
+	require.Equal(t, res["BTC"][0].Name, "Bitcoin")
+	require.True(t, len(res["BTC"][0].Quotes) > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {

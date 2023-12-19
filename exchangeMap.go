@@ -19,7 +19,7 @@ func (c *Client) ExchangeMapBySlug(ctx context.Context, slug []string) ([]*types
 }
 
 func (c *Client) exchangeMap(ctx context.Context, params map[string]string, active bool, start uint, limit uint) ([]*types.ExchangeMap, *types.Status, error) {
-	req, err := c.createRequest(ctx, "/exchange/map")
+	req, err := c.createRequest(ctx, "/v1/exchange/map")
 	if err != nil {
 		return nil, nil, err
 	}

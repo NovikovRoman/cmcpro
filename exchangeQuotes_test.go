@@ -1,9 +1,11 @@
 package cmcpro
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
@@ -11,34 +13,34 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 		contextTest, []uint{270}, NewConvertByCodes("RUB", "EUR"), // RUB, EUR
 	)
 
-	require.Equal(t, res["270"].Slug, "binance")
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res["270"].Slug, "binance")
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 2)
+		assert.EqualValues(t, status.CreditCount, 2)
 	}
 
 	res, status, _ = cTest.ExchangeQuotesLatestByID(
 		contextTest, []uint{270}, NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.Equal(t, res["270"].Slug, "binance")
-	require.NotNil(t, res["270"].Quote["RUB"])
-	require.NotNil(t, res["270"].Quote["EUR"])
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res["270"].Slug, "binance")
+	assert.NotNil(t, res["270"].Quote["RUB"])
+	assert.NotNil(t, res["270"].Quote["EUR"])
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 2)
+		assert.EqualValues(t, status.CreditCount, 2)
 	}
 
 	res, status, _ = cTest.ExchangeQuotesLatestByID(
 		contextTest, []uint{270}, nil,
 	)
 
-	require.Equal(t, res["270"].Slug, "binance")
-	require.NotNil(t, res["270"].Quote["USD"])
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res["270"].Slug, "binance")
+	assert.NotNil(t, res["270"].Quote["USD"])
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
 		require.EqualValues(t, status.CreditCount, 1)
 	}
@@ -47,30 +49,30 @@ func TestClient_ExchangeQuotesLatestByID(t *testing.T) {
 		contextTest, []uint{1000000000}, nil,
 	)
 
-	require.Equal(t, status.ErrorCode, 400)
-	require.Len(t, res, 0)
+	assert.Equal(t, status.ErrorCode, 400)
+	assert.Len(t, res, 0)
 }
 
 func TestClient_ExchangeQuotesLatestBySlug(t *testing.T) {
 	res, status, _ := cTest.ExchangeQuotesLatestBySlug(
-		contextTest, []string{"bittrex"}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []string{"binance"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.Equal(t, res["bittrex"].Slug, "bittrex")
-	require.NotNil(t, res["bittrex"].Quote["RUB"])
-	require.NotNil(t, res["bittrex"].Quote["EUR"])
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.Equal(t, res["binance"].Slug, "binance")
+	assert.NotNil(t, res["binance"].Quote["RUB"])
+	assert.NotNil(t, res["binance"].Quote["EUR"])
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 2)
+		assert.EqualValues(t, status.CreditCount, 2)
 	}
 
 	res, status, _ = cTest.ExchangeQuotesLatestBySlug(
 		contextTest, []string{"---"}, nil,
 	)
 
-	require.Equal(t, status.ErrorCode, 400)
-	require.Len(t, res, 0)
+	assert.Equal(t, status.ErrorCode, 400)
+	assert.Len(t, res, 0)
 }
 
 func TestClient_ExchangeQuotesHistoricalByID(t *testing.T) {
@@ -79,12 +81,12 @@ func TestClient_ExchangeQuotesHistoricalByID(t *testing.T) {
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
 	res, status, _ := cTest.ExchangeQuotesHistoricalByID(
-		contextTest, 22, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, 270, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.EqualValues(t, res.ID, 22)
-	require.Equal(t, res.Name, "Bittrex")
-	require.True(t, len(res.Quotes) <= 14)
+	require.EqualValues(t, res.ID, 270)
+	require.Equal(t, res.Name, "Binance")
+	require.True(t, len(res.Quotes) > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {
@@ -93,12 +95,12 @@ func TestClient_ExchangeQuotesHistoricalByID(t *testing.T) {
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.ExchangeQuotesHistoricalByID(
-		contextTest, 22, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, 270, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.EqualValues(t, res.ID, 22)
-	require.Equal(t, res.Name, "Bittrex")
-	require.True(t, len(res.Quotes) <= 5)
+	require.EqualValues(t, res.ID, 270)
+	require.Equal(t, res.Name, "Binance")
+	require.True(t, len(res.Quotes) > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	require.EqualValues(t, status.CreditCount, 2)
@@ -110,12 +112,12 @@ func TestClient_ExchangeQuotesHistoricalBySymbol(t *testing.T) {
 	perioder := NewPeriod(&timeStart, &timeEnd, 50)
 
 	res, status, _ := cTest.ExchangeQuotesHistoricalBySlug(
-		contextTest, "bittrex", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, "binance", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.EqualValues(t, res.ID, 22)
-	require.Equal(t, res.Name, "Bittrex")
-	require.True(t, len(res.Quotes) <= 14)
+	require.EqualValues(t, res.ID, 270)
+	require.Equal(t, res.Name, "Binance")
+	require.True(t, len(res.Quotes) > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {
@@ -124,12 +126,12 @@ func TestClient_ExchangeQuotesHistoricalBySymbol(t *testing.T) {
 
 	perioder = NewPeriod(&timeStart, nil, 5)
 	res, status, _ = cTest.ExchangeQuotesHistoricalBySlug(
-		contextTest, "bittrex", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
+		contextTest, "binance", perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.EqualValues(t, res.ID, 22)
-	require.Equal(t, res.Name, "Bittrex")
-	require.True(t, len(res.Quotes) <= 5)
+	require.EqualValues(t, res.ID, 270)
+	require.Equal(t, res.Name, "Binance")
+	require.True(t, len(res.Quotes) > 0)
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {

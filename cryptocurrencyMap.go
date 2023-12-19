@@ -19,7 +19,7 @@ func (c *Client) CryptocurrencyMapBySymbol(ctx context.Context, symbol []string)
 }
 
 func (c *Client) cryptocurrencyMap(ctx context.Context, params map[string]string, active bool, start uint, limit uint) ([]*types.CryptocurrencyMap, *types.Status, error) {
-	req, err := c.createRequest(ctx, "/cryptocurrency/map")
+	req, err := c.createRequest(ctx, "/v1/cryptocurrency/map")
 	if err != nil {
 		return nil, nil, err
 	}

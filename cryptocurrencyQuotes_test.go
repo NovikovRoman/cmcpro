@@ -1,9 +1,11 @@
 package cmcpro
 
 import (
-	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestClient_CryptocurrencyQuotesLatestByID(t *testing.T) {
@@ -80,9 +82,9 @@ func TestClient_CryptocurrencyQuotesLatestBySymbol(t *testing.T) {
 		contextTest, []string{"LTC"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.Equal(t, res["LTC"].Slug, "litecoin")
-	require.NotNil(t, res["LTC"].Quote["RUB"])
-	require.NotNil(t, res["LTC"].Quote["EUR"])
+	require.Equal(t, res["LTC"][0].Slug, "litecoin")
+	require.NotNil(t, res["LTC"][0].Quote["RUB"])
+	require.NotNil(t, res["LTC"][0].Quote["EUR"])
 	require.Equal(t, status.ErrorCode, 0)
 	require.Equal(t, status.ErrorMessage, "")
 	if prodTest {
@@ -90,11 +92,11 @@ func TestClient_CryptocurrencyQuotesLatestBySymbol(t *testing.T) {
 	}
 
 	res, status, _ = cTest.CryptocurrencyQuotesLatestBySymbol(
-		contextTest, []string{"---"}, NewConvertByCodes("RUB", "EUR"),
+		contextTest, []string{"1-2-3"}, NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.Equal(t, status.ErrorCode, 400)
-	require.Len(t, res, 0)
+	require.Equal(t, status.ErrorCode, 0)
+	require.Len(t, res["1-2-3"], 0)
 }
 
 func TestClient_CryptocurrencyQuotesHistoricalByID(t *testing.T) {
@@ -106,14 +108,14 @@ func TestClient_CryptocurrencyQuotesHistoricalByID(t *testing.T) {
 		contextTest, 1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.NotNil(t, res)
-	require.EqualValues(t, res.ID, 1)
-	require.Equal(t, res.Name, "Bitcoin")
-	require.True(t, len(res.Quotes) <= 14)
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.NotNil(t, res)
+	assert.EqualValues(t, res["1"].ID, 1)
+	assert.Equal(t, res["1"].Name, "Bitcoin")
+	assert.True(t, len(res["1"].Quotes) > 0)
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 2)
+		assert.EqualValues(t, status.CreditCount, 2)
 	}
 
 	perioder = NewPeriod(&timeStart, nil, 5)
@@ -121,13 +123,13 @@ func TestClient_CryptocurrencyQuotesHistoricalByID(t *testing.T) {
 		contextTest, 1, perioder, "1d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.EqualValues(t, res.ID, 1)
-	require.Equal(t, res.Name, "Bitcoin")
-	require.True(t, len(res.Quotes) <= 4)
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.EqualValues(t, res["1"].ID, 1)
+	assert.Equal(t, res["1"].Name, "Bitcoin")
+	assert.True(t, len(res["1"].Quotes) > 0)
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
-		require.EqualValues(t, status.CreditCount, 2)
+		assert.EqualValues(t, status.CreditCount, 2)
 	}
 }
 
@@ -140,12 +142,12 @@ func TestClient_CryptocurrencyQuotesHistoricalBySymbol(t *testing.T) {
 		contextTest, "BTC", perioder, "1d", NewConvertByCodes("USD"),
 	)
 
-	require.NotNil(t, res)
-	require.EqualValues(t, res.ID, 1)
-	require.Equal(t, res.Name, "Bitcoin")
-	require.True(t, len(res.Quotes) <= 14)
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.NotNil(t, res)
+	assert.EqualValues(t, res["BTC"][0].ID, 1)
+	assert.Equal(t, res["BTC"][0].Name, "Bitcoin")
+	assert.True(t, len(res["BTC"][0].Quotes) > 0)
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
 		require.EqualValues(t, status.CreditCount, 1)
 	}
@@ -155,11 +157,11 @@ func TestClient_CryptocurrencyQuotesHistoricalBySymbol(t *testing.T) {
 		contextTest, "BTC", perioder, "7d", NewConvertByCodes("RUB", "EUR"),
 	)
 
-	require.EqualValues(t, res.ID, 1)
-	require.Equal(t, res.Name, "Bitcoin")
-	require.Len(t, res.Quotes, 2)
-	require.Equal(t, status.ErrorCode, 0)
-	require.Equal(t, status.ErrorMessage, "")
+	assert.EqualValues(t, res["BTC"][0].ID, 1)
+	assert.Equal(t, res["BTC"][0].Name, "Bitcoin")
+	assert.True(t, len(res["BTC"][0].Quotes) > 0)
+	assert.Equal(t, status.ErrorCode, 0)
+	assert.Equal(t, status.ErrorMessage, "")
 	if prodTest {
 		require.EqualValues(t, status.CreditCount, 2)
 	}
