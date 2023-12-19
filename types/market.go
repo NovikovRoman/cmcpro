@@ -17,7 +17,7 @@ type PairInfo struct {
 }
 
 type QuotePair struct {
-	Price          float32   `json:"price,omitempty"`
+	Price          float64   `json:"price,omitempty"`
 	Volume24h      float64   `json:"volume_24h,omitempty"`
 	Volume24hBase  float64   `json:"volume_24h_base,omitempty"`
 	Volume24hQuote float64   `json:"volume_24h_quote,omitempty"`

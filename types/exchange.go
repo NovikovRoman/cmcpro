@@ -17,6 +17,7 @@ type ExchangeQuoteHistorical struct {
 
 type ExchangeLatest struct {
 	BasicExchange
+	Rank int `json:"rank,omitempty"`
 	// -1 unknown
 	NumMarketPairs int                            `json:"num_market_pairs"`
 	LastUpdated    time.Time                      `json:"last_updated,omitempty"`
