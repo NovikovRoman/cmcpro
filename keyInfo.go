@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (c *Client) KeyInfo(ctx context.Context) (keyInfo *types.KeyInfo, status *types.Status, err error) {
+func (c *Client) KeyInfo(ctx context.Context) (keyInfo types.KeyInfo, status types.Status, err error) {
 	var (
 		req *http.Request
 	)
@@ -15,16 +15,13 @@ func (c *Client) KeyInfo(ctx context.Context) (keyInfo *types.KeyInfo, status *t
 		return
 	}
 
-	respInfo := struct {
-		Data   *types.KeyInfo `json:"data"`
-		Status *types.Status  `json:"status"`
+	res := struct {
+		Data   types.KeyInfo `json:"data"`
+		Status types.Status  `json:"status"`
 	}{}
 
-	if err = c.exec(req, &respInfo); err != nil {
+	if err = c.exec(req, &res); err != nil {
 		return
 	}
-
-	keyInfo = respInfo.Data
-	status = respInfo.Status
-	return
+	return res.Data, res.Status, nil
 }
