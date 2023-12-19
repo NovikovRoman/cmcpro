@@ -2,12 +2,13 @@ package cmcpro
 
 import (
 	"context"
-	"github.com/NovikovRoman/cmcpro/types"
 	"strconv"
 	"strings"
+
+	"github.com/NovikovRoman/cmcpro/types"
 )
 
-func (c *Client) ExchangeQuotesLatestByID(ctx context.Context, id []uint, converter Converter) (map[string]*types.ExchangeMarketQuotesLatest, *types.Status, error) {
+func (c *Client) ExchangeQuotesLatestByID(ctx context.Context, id []uint, converter Converter) (map[string]types.ExchangeMarketQuotesLatest, types.Status, error) {
 
 	ids := make([]string, len(id))
 	for k, v := range id {
@@ -17,73 +18,67 @@ func (c *Client) ExchangeQuotesLatestByID(ctx context.Context, id []uint, conver
 	params := map[string]string{
 		"id": strings.Join(ids, ","),
 	}
-
 	return c.exchangeQuotesLatest(ctx, params, converter)
 }
 
-func (c *Client) ExchangeQuotesLatestBySlug(ctx context.Context, slug []string, converter Converter) (map[string]*types.ExchangeMarketQuotesLatest, *types.Status, error) {
+func (c *Client) ExchangeQuotesLatestBySlug(ctx context.Context, slug []string, converter Converter) (map[string]types.ExchangeMarketQuotesLatest, types.Status, error) {
 
 	params := map[string]string{
 		"slug": strings.Join(slug, ","),
 	}
-
 	return c.exchangeQuotesLatest(ctx, params, converter)
 }
 
-func (c *Client) exchangeQuotesLatest(ctx context.Context, params map[string]string, converter Converter) (map[string]*types.ExchangeMarketQuotesLatest, *types.Status, error) {
+func (c *Client) exchangeQuotesLatest(ctx context.Context, params map[string]string, converter Converter) (data map[string]types.ExchangeMarketQuotesLatest, status types.Status, err error) {
 
 	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/v1/exchange/quotes/latest", params, nil, "", converter)
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
 	respInfo := struct {
-		Data   map[string]*types.ExchangeMarketQuotesLatest `json:"data"`
-		Status types.Status
-	}{}
-
-	if err := c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
-	}
-
-	return respInfo.Data, &respInfo.Status, nil
-}
-
-func (c *Client) ExchangeQuotesHistoricalByID(ctx context.Context, id uint, perioder Perioder, interval string, converter Converter) (*types.ExchangeMarketQuotesHistorical, *types.Status, error) {
-
-	params := map[string]string{
-		"id": strconv.FormatUint(uint64(id), 10),
-	}
-
-	return c.exchangeQuotesHistorical(ctx, params, perioder, interval, converter)
-}
-
-func (c *Client) ExchangeQuotesHistoricalBySlug(ctx context.Context, slug string, perioder Perioder, interval string, converter Converter) (*types.ExchangeMarketQuotesHistorical, *types.Status, error) {
-
-	params := map[string]string{
-		"slug": slug,
-	}
-
-	return c.exchangeQuotesHistorical(ctx, params, perioder, interval, converter)
-}
-
-func (c *Client) exchangeQuotesHistorical(ctx context.Context, params map[string]string, perioder Perioder, interval string, converter Converter) (*types.ExchangeMarketQuotesHistorical, *types.Status, error) {
-
-	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/v1/exchange/quotes/historical", params, perioder, interval, converter)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	respInfo := struct {
-		Data   *types.ExchangeMarketQuotesHistorical `json:"data"`
+		Data   map[string]types.ExchangeMarketQuotesLatest `json:"data"`
 		Status types.Status
 	}{}
 
 	if err = c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+		return
+	}
+	return respInfo.Data, respInfo.Status, nil
+}
+
+func (c *Client) ExchangeQuotesHistoricalByID(ctx context.Context, id uint, perioder Perioder, interval string, converter Converter) (types.ExchangeMarketQuotesHistorical, types.Status, error) {
+
+	params := map[string]string{
+		"id": strconv.FormatUint(uint64(id), 10),
+	}
+	return c.exchangeQuotesHistorical(ctx, params, perioder, interval, converter)
+}
+
+func (c *Client) ExchangeQuotesHistoricalBySlug(ctx context.Context, slug string, perioder Perioder, interval string, converter Converter) (types.ExchangeMarketQuotesHistorical, types.Status, error) {
+
+	params := map[string]string{
+		"slug": slug,
+	}
+	return c.exchangeQuotesHistorical(ctx, params, perioder, interval, converter)
+}
+
+func (c *Client) exchangeQuotesHistorical(ctx context.Context, params map[string]string, perioder Perioder, interval string, converter Converter) (data types.ExchangeMarketQuotesHistorical, status types.Status, err error) {
+
+	req, err := c.createRequestCryptocurrencyQuotes(ctx, "/v1/exchange/quotes/historical", params, perioder, interval, converter)
+	if err != nil {
+		return
 	}
 
-	return respInfo.Data, &respInfo.Status, nil
+	respInfo := struct {
+		Data   types.ExchangeMarketQuotesHistorical `json:"data"`
+		Status types.Status
+	}{}
+
+	if err = c.exec(req, &respInfo); err != nil {
+		return
+	}
+	return respInfo.Data, respInfo.Status, nil
 }
 
 /* func (c *Client) createRequestExchangeQuotes(ctx context.Context, link string, params map[string]string, perioder Perioder, interval string, converter Converter) (*http.Request, error) {
