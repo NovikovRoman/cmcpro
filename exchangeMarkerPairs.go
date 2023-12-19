@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func (c *Client) ExchangeMarketPairByID(ctx context.Context, id uint, start uint, limit uint, converter Converter) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
+func (c *Client) ExchangeMarketPairByID(ctx context.Context, id uint, start uint, limit uint, converter Converter) (types.ExchangeMarketPairsLatest, types.Status, error) {
 
 	params := map[string]string{
 		"id": strconv.FormatUint(uint64(id), 10),
@@ -15,7 +15,7 @@ func (c *Client) ExchangeMarketPairByID(ctx context.Context, id uint, start uint
 	return c.exchangeMarketPair(ctx, params, start, limit, converter)
 }
 
-func (c *Client) ExchangeMarketPairBySlug(ctx context.Context, slug string, start uint, limit uint, converter Converter) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
+func (c *Client) ExchangeMarketPairBySlug(ctx context.Context, slug string, start uint, limit uint, converter Converter) (types.ExchangeMarketPairsLatest, types.Status, error) {
 
 	params := map[string]string{
 		"slug": slug,
@@ -24,11 +24,11 @@ func (c *Client) ExchangeMarketPairBySlug(ctx context.Context, slug string, star
 	return c.exchangeMarketPair(ctx, params, start, limit, converter)
 }
 
-func (c *Client) exchangeMarketPair(ctx context.Context, params map[string]string, start uint, limit uint, converter Converter) (*types.ExchangeMarketPairsLatest, *types.Status, error) {
+func (c *Client) exchangeMarketPair(ctx context.Context, params map[string]string, start uint, limit uint, converter Converter) (data types.ExchangeMarketPairsLatest, status types.Status, err error) {
 
 	req, err := c.createRequest(ctx, "/v1/exchange/market-pairs/latest")
 	if err != nil {
-		return nil, nil, err
+		return
 	}
 
 	query := req.URL.Query()
@@ -61,8 +61,8 @@ func (c *Client) exchangeMarketPair(ctx context.Context, params map[string]strin
 	}{}
 
 	if err = c.exec(req, &respInfo); err != nil {
-		return nil, nil, err
+		return
 	}
 
-	return &respInfo.Data, &respInfo.Status, nil
+	return respInfo.Data, respInfo.Status, nil
 }
