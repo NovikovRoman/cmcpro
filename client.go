@@ -86,6 +86,6 @@ func createHttpTransport(proxy string) (*http.Transport, error) {
 
 func closer(c io.Closer) {
 	if err := c.Close(); err != nil {
-		log.Fatalf("%s", err.Error())
+		log.Println(err)
 	}
 }
